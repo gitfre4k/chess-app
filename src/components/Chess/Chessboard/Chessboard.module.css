@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, 70px);
+  border: 16px solid #7d694c;
+  position: relative;
+}
+
+.promotions {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  z-index: 1;
+  border: 16px solid #7d694c;
+}
+
+.white {
+  top: -70px;
+  border-bottom: 0;
+}
+
+.black {
+  bottom: -70px;
+  border-top: 0;
+}
