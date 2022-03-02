@@ -1,40 +1,39 @@
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db, auth } from "../../firebase";
-import { collection, query, where, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
+import Chess from "../../components/Chess";
 import Chat from "../../components/Chat/Chat";
-import Sidebar from "../../components/Sidebar/Sidebar";
 
-import { GetServerSideProps } from "next";
+// import { GetServerSideProps } from "next";
 
-interface IRoomProps {
-  messages: { [key: string]: string }[];
-}
+// interface IRoomProps {
+//   messages: [{ roomID: string }, { user: string }, { msg: string }, { timestamp: string }];
+// }
 
-const Room = ({ messages }: IRoomProps) => {
+const Room = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
+  // const messages: { roomID: string; user: string; msg: string; timestamp: string }[] = JSON.parse(
+  //   `${msg}`
+  // );
 
-  const { id } = router.query;
   const sendMessage = (msg: string) => {
-    if (id && user) {
+    if (router.query.id && user) {
       addDoc(collection(db, "messages"), {
+        timestamp: serverTimestamp(),
         user: user.uid,
-        id,
+        roomID: router.query.id,
         msg,
       });
     }
   };
 
-  const showMessages = () => {};
-
   return (
     <>
-      <h1>Room id: {id}</h1>
-      {messages.map((msg, index) => (
-        <p key={index}>{msg.msg}</p>
-      ))}
+      <h2>Room id: {router.query.id}</h2>
+      <Chess />
       <Chat sendMessage={sendMessage} />
     </>
   );
@@ -42,17 +41,17 @@ const Room = ({ messages }: IRoomProps) => {
 
 export default Room;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const colRef = collection(db, "messages");
-  const q = query(colRef, where("id", "==", context.query.id));
-  const querySnapshot = await getDocs(q);
-  const messages: { id: string }[] = [];
-  querySnapshot.forEach((doc) => {
-    messages.push({ ...doc.data(), id: doc.id });
-  });
-  return {
-    props: {
-      messages,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const colRef = collection(db, "messages");
+//   const q = query(colRef, where("roomID", "==", context.query.id), orderBy("timestamp"));
+//   const querySnapshot = await getDocs(q);
+
+//   const messages: { id: string }[] = [];
+//   querySnapshot.forEach((doc) => messages.push({ ...doc.data(), id: doc.id }));
+
+//   return {
+//     props: {
+//       messages: JSON.stringify(messages),
+//     },
+//   };
+// };

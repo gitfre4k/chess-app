@@ -13,6 +13,7 @@ const Sidebar = () => {
   const createRoom = () => {
     addDoc(collection(db, "rooms"), {
       users: [user?.email],
+      white: user?.email,
     }).then((room) => router.push(`/room/${room.id}`));
   };
 
@@ -22,6 +23,7 @@ const Sidebar = () => {
     const docRef = doc(db, "rooms", roomID);
     updateDoc(docRef, {
       users: arrayUnion(user?.email),
+      black: user?.email,
     })
       .then(() => router.push(`/room/${roomID}`))
       .catch((err) => err && alert("Wrong room ID!"));

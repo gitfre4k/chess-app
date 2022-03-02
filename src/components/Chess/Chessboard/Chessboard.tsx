@@ -1,4 +1,7 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../../firebase";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
@@ -11,6 +14,9 @@ import { IFigure, IDestination } from "./interfaces";
 import styles from "./Chessboard.module.css";
 
 const Chessboard: React.FC = () => {
+  const router = useRouter();
+  const [user] = useAuthState(auth);
+
   const { activePlayer, changePlayer } = hooks.useTurnSwitch();
   const { positions, updatePositions, upgradePawn } = hooks.usePositions();
   const { selectedFigure, validMoves, selectFigure, deselectFigure } = hooks.useFigure();
