@@ -5,7 +5,7 @@ import { auth, db } from "../../firebase";
 import { collection, doc, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { startingPositions } from "../../constants/positions";
 
-import styled from "styled-components";
+import styles from "../../styles/components/Navbar.module.scss";
 
 const Navbar = () => {
   const router = useRouter();
@@ -41,37 +41,12 @@ const Navbar = () => {
   };
 
   return (
-    <Container>
-      <Button onClick={createRoom}>Create room</Button>
-      <Button onClick={joinRoom}>Join room</Button>
-      <Button onClick={() => auth.signOut()}>SignOut</Button>
-    </Container>
+    <div className={styles.container}>
+      <button onClick={createRoom}>Create room</button>
+      <button onClick={joinRoom}>Join room</button>
+      <button onClick={() => auth.signOut()}>SignOut</button>
+    </div>
   );
 };
-
-const Container = styled.nav`
-  width: 95%;
-  height: 60px;
-  position: sticky;
-  display: flex;
-  z-index: 1;
-  top: 10px;
-  background-color: rgb(12, 12, 12);
-  overflow-x: hidden;
-  border-radius: 50px;
-`;
-
-const Button = styled.button`
-  padding: 8px 20px;
-  margin: 7px 6px;
-  border: 2px solid white;
-  border-radius: 50px;
-  background: none;
-  color: white;
-  :hover {
-    background-color: rgb(22, 22, 22);
-    cursor: pointer;
-  }
-`;
 
 export default Navbar;

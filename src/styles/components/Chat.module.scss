@@ -1,0 +1,29 @@
+.container {
+  position: absolute;
+  flex: 1;
+  width: 300px;
+  height: 50vh;
+  background-color: #313131;
+  border: 5px solid white;
+  right: 0;
+  top: 0;
+  form {
+    position: absolute;
+    bottom: 0;
+  }
+  input {
+    width: 100%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    position: absolute;
+    padding: 12px 26px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    bottom: 0;
+  }
+}

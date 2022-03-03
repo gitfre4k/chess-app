@@ -1,0 +1,21 @@
+.container {
+  p {
+    width: fit-content;
+    padding: 5px;
+    border-radius: 8px;
+    margin: 5px;
+    min-width: 60px;
+    padding-bottom: 10px;
+    position: relative;
+    text-align: right;
+    color: black;
+  }
+}
+.sender {
+  margin-left: auto;
+  background-color: #cdf5af;
+}
+.reciver {
+  background-color: whitesmoke;
+  text-align: left;
+}

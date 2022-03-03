@@ -13,7 +13,7 @@ import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
 import { IFigure, IDestination } from "./interfaces";
-import styles from "./Chessboard.module.css";
+import styles from "../../../styles/components/Chessboard.module.scss";
 
 const Chessboard: React.FC = () => {
   const router = useRouter();

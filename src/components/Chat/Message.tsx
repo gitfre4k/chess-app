@@ -1,7 +1,7 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
 
-import styled from "styled-components";
+import styles from "../../styles/components/Message.module.scss";
 
 interface IMessage {
   msgUserID: string;
@@ -11,37 +11,13 @@ interface IMessage {
 const Message: React.FC<IMessage> = ({ msgUserID, message }) => {
   const [user] = useAuthState(auth);
 
-  const ElementType = msgUserID === user?.uid ? Sender : Reciever;
+  const msgClass = msgUserID === user?.uid ? styles.sender : styles.reciver;
 
   return (
-    <Container>
-      <ElementType>{message}</ElementType>
-    </Container>
+    <div className={styles.container}>
+      <p className={msgClass}>{message}</p>
+    </div>
   );
 };
 
 export default Message;
-
-const Container = styled.div``;
-
-const MessageElement = styled.p`
-  width: fit-content;
-  padding: 5px;
-  border-radius: 8px;
-  margin: 5px;
-  min-width: 60px;
-  padding-bottom: 10px;
-  position: relative;
-  text-align: right;
-  color: black;
-`;
-
-const Sender = styled(MessageElement)`
-  margin-left: auto;
-  background-color: #dcf8c6;
-`;
-
-const Reciever = styled(MessageElement)`
-  background-color: whitesmoke;
-  text-align: left;
-`;

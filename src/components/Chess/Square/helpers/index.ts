@@ -1,5 +1,5 @@
 import { getFigureName } from "../../Chessboard/helpers/figure-info";
-import styles from "../Square.module.css";
+import styles from "../../../../styles/components/Square.module.scss";
 
 import { ICheck } from "../interfaces";
 

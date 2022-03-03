@@ -2,7 +2,7 @@ import Image from "next/image";
 import loadingImage from "../../assets/images/loading.jpg";
 
 import Head from "next/head";
-import styled from "styled-components";
+import styles from "../../styles/components/Loading.module.scss";
 
 const Loading = () => {
   return (
@@ -10,26 +10,12 @@ const Loading = () => {
       <Head>
         <title>Loading...</title>
       </Head>
-      <Container>
+      <div className={styles.container}>
         <Image src={loadingImage} alt="blured image of chessboard" />
-        <Header>Loading...</Header>
-      </Container>
+        <h2>Loading...</h2>
+      </div>
     </>
   );
 };
 
 export default Loading;
-
-const Container = styled.div`
-  height: 100vh;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Header = styled.h1`
-  position: absolute;
-  font-size: 60px;
-  z-index: 9;
-`;

@@ -2,7 +2,7 @@ import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 
 import Head from "next/head";
-import styled from "styled-components";
+import styles from "../styles/pages/login.module.scss";
 
 const Login = () => {
   const clickHandler = () => {
@@ -10,19 +10,15 @@ const Login = () => {
   };
 
   return (
-    <Container>
+    <>
       <Head>
         <title>Login</title>
       </Head>
-      <button onClick={clickHandler}>Sign in with Google</button>
-    </Container>
+      <div className={styles.container}>
+        <button onClick={clickHandler}>Sign in with Google</button>
+      </div>
+    </>
   );
 };
-
-const Container = styled.div`
-  display: grid;
-  place-items: center;
-  height: 100vh;
-`;
 
 export default Login;

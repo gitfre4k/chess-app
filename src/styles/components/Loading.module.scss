@@ -1,0 +1,12 @@
+.container {
+  height: 100vh;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    position: absolute;
+    font-size: 60px;
+    z-index: 9;
+  }
+}
