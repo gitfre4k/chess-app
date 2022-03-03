@@ -1,4 +1,4 @@
-import { WhiteKing, BlackKing } from "../../constants/figures";
+import { WhiteKing, BlackKing } from "../../../../../constants/figures";
 import { getFigureColor, getFigureByXY } from "../figure-info";
 import isMoveValid from "./isMoveValid";
 
@@ -9,7 +9,6 @@ const isKingSafe = (moveInfo: string[], positions: { [key: string]: string | und
       positions[key] ===
       (activePlayer === "white" || moveInfo[1] === "white" ? WhiteKing.src : BlackKing.src)
   );
-  // Object.keys(positions).find((key) => positions[key] === BlackKing);
   if (king === moveInfo[0]) king = moveInfo[1];
 
   if (moveInfo[0] === "CHECK")

@@ -51,13 +51,15 @@ const setFigure = (index: number) => {
 };
 
 const boardSetup = (xyNotation: [number, number][]) => {
-  const positions: { [key: string]: string | undefined } = {};
+  const startingPositions: { [key: string]: string | undefined } = {};
+  const emptyBoard: { [key: string]: undefined } = {};
   xyNotation.map((square, index) => {
-    positions[`${square[0]}${square[1]}`] = setFigure(index);
+    startingPositions[`${square[0]}${square[1]}`] = setFigure(index);
+    emptyBoard[`${square[0]}${square[1]}`] = undefined;
   });
-  return positions;
+  return { startingPositions, emptyBoard };
 };
 
-const startingPositions = boardSetup(xyNotation);
+const { startingPositions, emptyBoard } = boardSetup(xyNotation);
 
-export default startingPositions;
+export { startingPositions, emptyBoard };

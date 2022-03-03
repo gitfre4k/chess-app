@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../firebase";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { auth, db } from "../../../firebase";
+import { doc } from "firebase/firestore";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
-import { xyNotation, algebraicNotation } from "./constants/square-notation";
-import * as f from "./constants/figures";
+import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
+import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
@@ -15,6 +17,8 @@ import styles from "./Chessboard.module.css";
 
 const Chessboard: React.FC = () => {
   const router = useRouter();
+  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
+  const [roomDataSnapshot] = useDocumentData(roomDocRef);
   const [user] = useAuthState(auth);
 
   const { activePlayer, changePlayer } = hooks.useTurnSwitch();
@@ -36,6 +40,7 @@ const Chessboard: React.FC = () => {
   }, [mate]);
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
+    if (roomDataSnapshot?.[activePlayer] !== user?.email) return;
     if (mate || pawnPromotion) return;
     if (!selectedFigure && figure && activePlayer === figure.color) {
       selectFigure(figure, positions, enPassantMoves, castling);

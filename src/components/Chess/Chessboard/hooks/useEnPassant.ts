@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../firebase";
 import { getFigureName, getFigureColor, getAxis } from "../helpers/figure-info";
 
 import { IEnPassantMoves, IPositions } from "../interfaces";
 
 const useEnPassant = () => {
   const [enPassantMoves, setEnPassantMoves] = useState<IEnPassantMoves>({
-    white: undefined,
-    black: undefined,
+    white: [],
+    black: [],
   });
+  const router = useRouter();
+  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
+  const [roomSnapshot] = useDocumentData(roomDocRef);
+
+  useEffect(() => {
+    if (roomSnapshot)
+      setEnPassantMoves((prevValue) => {
+        const newValue = JSON.parse(roomSnapshot.enPassant);
+        return { ...prevValue, ...newValue };
+      });
+  }, [roomSnapshot]);
 
   const checkForEnPassant = (moveInfo: string[], positions: IPositions) => {
     if (getFigureName(positions[moveInfo[0]]) === "pawn") {
@@ -34,21 +49,18 @@ const useEnPassant = () => {
           enPassantFigures,
           `${figure.x}${figure.y + 1 * i}`,
         ];
-        setEnPassantMoves((prevValue) => {
-          const newValue = { ...prevValue };
-          i > 0 ? (newValue.black = enPassantValue) : (newValue.white = enPassantValue);
-          return newValue;
-        });
+
+        const newValue = { ...enPassantMoves };
+        i > 0 ? (newValue.black = enPassantValue) : (newValue.white = enPassantValue);
+        updateDoc(roomDocRef, { enPassant: JSON.stringify(newValue) });
       }
     }
   };
 
   const preventEnPassant = (activePlayer: "white" | "black") => {
-    setEnPassantMoves((prevValue) => {
-      const newValue = { ...prevValue };
-      activePlayer === "white" ? (newValue.black = undefined) : (newValue.white = undefined);
-      return newValue;
-    });
+    const newValue = { ...enPassantMoves };
+    activePlayer === "white" ? (newValue.black = []) : (newValue.white = []);
+    updateDoc(roomDocRef, { enPassant: JSON.stringify(newValue) });
   };
 
   return { enPassantMoves, checkForEnPassant, preventEnPassant };

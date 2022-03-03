@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 import { auth, db } from "../../firebase";
 import { collection, doc, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { startingPositions } from "../../constants/positions";
 
 import styled from "styled-components";
 
@@ -14,6 +15,16 @@ const Sidebar = () => {
     addDoc(collection(db, "rooms"), {
       users: [user?.email],
       white: user?.email,
+      positions: JSON.stringify(startingPositions),
+      activePlayer: "white",
+      enPassant: JSON.stringify({
+        white: [],
+        black: [],
+      }),
+      castling: JSON.stringify({
+        white: { short: true, long: true },
+        black: { short: true, long: true },
+      }),
     }).then((room) => router.push(`/room/${room.id}`));
   };
 

@@ -18,8 +18,8 @@ export interface IDestination {
 }
 
 export interface IEnPassantMoves {
-  white: [string[], string] | undefined;
-  black: [string[], string] | undefined;
+  white: [string[], string] | [];
+  black: [string[], string] | [];
 }
 
 export interface ICastling {

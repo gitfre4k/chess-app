@@ -10,8 +10,8 @@ const pawnValidity = (
   let i = player === "white" ? 1 : -1;
   if (
     enPassantMoves &&
-    enPassantMoves[player]?.[0].includes(figure.xy) &&
-    enPassantMoves[player]?.[1] === destination.xy
+    enPassantMoves[player][0]?.includes(figure.xy) &&
+    enPassantMoves[player][1] === destination.xy
   )
     return true;
   if (!positions[destination.xy] && figure.x === destination.x) {
