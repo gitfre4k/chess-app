@@ -33,6 +33,7 @@ const MessageElement = styled.p`
   padding-bottom: 10px;
   position: relative;
   text-align: right;
+  color: black;
 `;
 
 const Sender = styled(MessageElement)`

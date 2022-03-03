@@ -39,10 +39,10 @@ const Chat: React.FC<IChat> = ({ sendMessage }) => {
   return (
     <Container>
       <MessageContainer>{showMessages()}</MessageContainer>
-      <ChatInput onSubmit={submitHandler}>
-        <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-        <button>Send</button>
-      </ChatInput>
+      <ChatEntry onSubmit={submitHandler}>
+        <ChatInput value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <Button>Send</Button>
+      </ChatEntry>
     </Container>
   );
 };
@@ -52,17 +52,34 @@ export default Chat;
 const Container = styled.div`
   position: absolute;
   flex: 1;
-  owerflow: scroll;
   width: 300px;
   height: 50vh;
-  border: 5px solid black;
+  background-color: #313131;
+  border: 5px solid white;
   right: 0;
   top: 0;
 `;
 
 const MessageContainer = styled.div``;
-const ChatInput = styled.form`
+
+const ChatEntry = styled.form`
   position: absolute;
-  width: 300px;
+  bottom: 0;
+`;
+
+const ChatInput = styled.input`
+  width: 100%;
+  padding: 12px 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+`;
+
+const Button = styled.button`
+  position: absolute;
+  padding: 12px 26px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   bottom: 0;
 `;

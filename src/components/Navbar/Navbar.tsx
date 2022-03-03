@@ -7,7 +7,7 @@ import { startingPositions } from "../../constants/positions";
 
 import styled from "styled-components";
 
-const Sidebar = () => {
+const Navbar = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
 
@@ -42,22 +42,36 @@ const Sidebar = () => {
 
   return (
     <Container>
-      <button onClick={createRoom}>Create room</button>
-      <button onClick={joinRoom}>Join room</button>
-      <button onClick={() => auth.signOut()}>SignOut</button>
+      <Button onClick={createRoom}>Create room</Button>
+      <Button onClick={joinRoom}>Join room</Button>
+      <Button onClick={() => auth.signOut()}>SignOut</Button>
     </Container>
   );
 };
 
-const Container = styled.div`
-  height: 100%;
-  width: 100px;
-  position: fixed;
+const Container = styled.nav`
+  width: 95%;
+  height: 60px;
+  position: sticky;
+  display: flex;
   z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: rgb(37, 37, 37);
+  top: 10px;
+  background-color: rgb(12, 12, 12);
   overflow-x: hidden;
+  border-radius: 50px;
 `;
 
-export default Sidebar;
+const Button = styled.button`
+  padding: 8px 20px;
+  margin: 7px 6px;
+  border: 2px solid white;
+  border-radius: 50px;
+  background: none;
+  color: white;
+  :hover {
+    background-color: rgb(22, 22, 22);
+    cursor: pointer;
+  }
+`;
+
+export default Navbar;

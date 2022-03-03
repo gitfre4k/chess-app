@@ -19,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         await setDoc(
           doc(usersRef, user.uid),
           {
+            name: user.displayName,
             email: user.email,
             photoURL: user.photoURL,
           },
