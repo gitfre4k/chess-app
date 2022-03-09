@@ -1,0 +1,17 @@
+.container {
+  height: 40vh;
+  width: 15vw;
+  background: none;
+  position: relative;
+  margin: 7px 6px;
+  border: 2px solid white;
+  border-radius: 50px;
+  color: white;
+  font-size: 6vh;
+  text-align: center;
+  padding: 70px 20px;
+  &:hover {
+    background-color: rgb(12, 12, 12);
+    cursor: pointer;
+  }
+}

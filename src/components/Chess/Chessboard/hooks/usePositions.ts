@@ -46,6 +46,7 @@ const usePositions = () => {
     newPositions[destination.xy] = newPositions[figure.xy];
     newPositions[figure.xy] = undefined;
 
+    setPositions(newPositions);
     updateDoc(roomDocRef, {
       positions: JSON.stringify(newPositions),
     });

@@ -1,12 +1,12 @@
 .container {
   width: 95%;
-  height: 60px;
-  position: sticky;
+  height: 8vh;
+  position: absolute;
   display: flex;
+  justify-content: end;
   z-index: 1;
-  top: 10px;
+  top: 20px;
   background-color: rgb(12, 12, 12);
-  overflow-x: hidden;
   border-radius: 50px;
   button {
     padding: 8px 20px;
