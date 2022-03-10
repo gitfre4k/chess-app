@@ -7,11 +7,20 @@
   border: 2px solid white;
   border-radius: 50px;
   color: white;
-  font-size: 6vh;
+  font-size: 7vh;
+  font-weight: 600;
   text-align: center;
-  padding: 70px 20px;
+  justify-content: center;
   &:hover {
     background-color: rgb(12, 12, 12);
     cursor: pointer;
   }
+}
+
+.flip {
+  transform: scaleX(-1);
+}
+
+.text {
+  position: absolute;
 }

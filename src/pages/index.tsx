@@ -51,7 +51,7 @@ const Home: NextPage = () => {
       </Head>
       <main className={styles.container}>
         <Navbar />
-        <Card name="Create Room" onClick={createRoom} />
+        <Card name="Create Room" onClick={createRoom} first={true} />
         <Card name="Join Room" onClick={joinRoom} />
       </main>
     </>
