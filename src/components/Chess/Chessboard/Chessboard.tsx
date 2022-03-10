@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { auth, db } from "../../../firebase";
@@ -28,16 +28,21 @@ const Chessboard: React.FC = () => {
   const { castling, updateCastlingStatus } = hooks.useCastling();
   const { pawnPromotion, promotePawn, endPawnPromotion } = hooks.usePawnPromotion();
   const { check, mate, updateCheckStatus, checkForMate } = hooks.useCheckMate();
+  const positionsRef = useRef(positions);
+
+  useEffect(() => {
+    positionsRef.current = positions;
+  }, [positions]);
 
   useEffect(() => {
     preventEnPassant(activePlayer);
-    updateCheckStatus(activePlayer, positions);
-    checkForMate(activePlayer, positions);
-  }, [activePlayer, pawnPromotion]);
+    updateCheckStatus(activePlayer, positionsRef.current);
+    checkForMate(activePlayer, positionsRef.current);
+  }, [activePlayer, pawnPromotion, updateCheckStatus, checkForMate, preventEnPassant]);
 
   useEffect(() => {
     mate && (check[activePlayer] ? alert("checkmate") : alert("stalemate"));
-  }, [mate]);
+  }, [mate, check, activePlayer]);
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
     if (roomDataSnapshot?.[activePlayer] !== user?.email) return;

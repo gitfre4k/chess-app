@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
 
+import Navbar from "../components/Navbar/Navbar";
 import Loading from "../components/Loading/Loading";
 import Login from "./login";
 
@@ -32,7 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   if (loading) return <Loading />;
   if (!user) return <Login />;
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Navbar />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 export default MyApp;

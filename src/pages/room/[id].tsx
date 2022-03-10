@@ -6,6 +6,8 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import Chess from "../../components/Chess";
 import Chat from "../../components/Chat/Chat";
 
+import styles from "../../styles/pages/room.module.scss";
+
 // import { GetServerSideProps } from "next";
 
 // interface IRoomProps {
@@ -31,11 +33,11 @@ const Room = () => {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <h2>Room id: {router.query.id}</h2>
       <Chess />
       <Chat sendMessage={sendMessage} />
-    </>
+    </div>
   );
 };
 

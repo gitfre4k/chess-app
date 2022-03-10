@@ -1,13 +1,12 @@
 .container {
-  width: 95%;
+  width: 100vw;
   height: 8vh;
   position: absolute;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   z-index: 1;
-  top: 20px;
+  top: 0;
   background-color: rgb(12, 12, 12);
-  border-radius: 50px;
   button {
     padding: 8px 20px;
     margin: 7px 6px;

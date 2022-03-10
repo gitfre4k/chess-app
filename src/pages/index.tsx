@@ -5,7 +5,6 @@ import { auth, db } from "../firebase";
 import { collection, doc, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { startingPositions } from "../constants/positions";
 import Head from "next/head";
-import Navbar from "../components/Navbar/Navbar";
 import Card from "../components/Card/Card";
 
 import styles from "../styles/pages/Home.module.scss";
@@ -50,7 +49,6 @@ const Home: NextPage = () => {
         <title>Chess App</title>
       </Head>
       <main className={styles.container}>
-        <Navbar />
         <Card name="Create Room" onClick={createRoom} first={true} />
         <Card name="Join Room" onClick={joinRoom} />
       </main>

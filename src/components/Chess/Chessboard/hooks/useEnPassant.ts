@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/router";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -14,13 +14,16 @@ const useEnPassant = () => {
     black: [],
   });
   const router = useRouter();
-  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
-  const [roomSnapshot] = useDocumentData(roomDocRef);
+  const roomDoc = doc(db, "rooms", `${router.query.id}`);
+  const [roomSnapshot] = useDocumentData(roomDoc);
+  const enPassantMovesRef = useRef(enPassantMoves);
+  const roomDocRef = useRef(roomDoc);
 
   useEffect(() => {
     if (roomSnapshot)
       setEnPassantMoves((prevValue) => {
         const newValue = JSON.parse(roomSnapshot.enPassant);
+        enPassantMovesRef.current = { ...prevValue, ...newValue };
         return { ...prevValue, ...newValue };
       });
   }, [roomSnapshot]);
@@ -52,16 +55,16 @@ const useEnPassant = () => {
 
         const newValue = { ...enPassantMoves };
         i > 0 ? (newValue.black = enPassantValue) : (newValue.white = enPassantValue);
-        updateDoc(roomDocRef, { enPassant: JSON.stringify(newValue) });
+        updateDoc(roomDoc, { enPassant: JSON.stringify(newValue) });
       }
     }
   };
 
-  const preventEnPassant = (activePlayer: "white" | "black") => {
-    const newValue = { ...enPassantMoves };
+  const preventEnPassant = useCallback((activePlayer: "white" | "black") => {
+    const newValue = { ...enPassantMovesRef.current };
     activePlayer === "white" ? (newValue.black = []) : (newValue.white = []);
-    updateDoc(roomDocRef, { enPassant: JSON.stringify(newValue) });
-  };
+    updateDoc(roomDocRef.current, { enPassant: JSON.stringify(newValue) });
+  }, []);
 
   return { enPassantMoves, checkForEnPassant, preventEnPassant };
 };
