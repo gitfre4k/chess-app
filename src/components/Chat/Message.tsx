@@ -11,13 +11,9 @@ interface IMessage {
 const Message: React.FC<IMessage> = ({ msgUserID, message }) => {
   const [user] = useAuthState(auth);
 
-  const msgClass = msgUserID === user?.uid ? styles.sender : styles.reciver;
+  const msgType = msgUserID === user?.uid ? styles.sender : styles.reciver;
 
-  return (
-    <div className={styles.container}>
-      <p className={msgClass}>{message}</p>
-    </div>
-  );
+  return <p className={styles.message + " " + msgType}>{message}</p>;
 };
 
 export default Message;

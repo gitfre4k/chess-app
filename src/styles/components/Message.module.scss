@@ -1,18 +1,19 @@
-.container {
-  p {
-    width: fit-content;
-    padding: 5px;
-    border-radius: 8px;
-    margin: 5px;
-    min-width: 60px;
-    padding-bottom: 10px;
-    position: relative;
-    text-align: right;
-    color: black;
-  }
-}
-.sender {
+.message {
+  position: relative;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 8px;
+  margin: 5px;
+  min-width: 60px;
+  padding-bottom: 10px;
+  color: black;
+  text-align: right;
   margin-left: auto;
+  word-break: break-word;
+}
+
+.sender {
+  margin-left: 0;
   background-color: #cdf5af;
 }
 .reciver {

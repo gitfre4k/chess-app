@@ -1,0 +1,48 @@
+.container {
+  height: 30vh;
+  width: 20vw;
+  position: relative;
+  font-size: large;
+  margin: 7px 6px;
+  color: white;
+  justify-content: center;
+}
+
+.wraper {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: center;
+  border: 2px solid white;
+  border-radius: 50px;
+}
+
+.userInfo {
+  display: flex;
+  height: 12vh;
+  align-items: center;
+  gap: 1rem;
+  border: 2px solid white;
+  border-radius: 50px;
+  padding-left: 1.5rem;
+  p {
+    margin-left: 1rem;
+    width: min-content;
+  }
+}
+
+.hostFigure {
+  transform: scaleX(-1);
+}
+
+.waiting {
+  text-align: center;
+}
+
+.btn {
+  align-self: center;
+}
+
+.wrrraper {
+  display: flex;
+  flex-direction: column;
+}

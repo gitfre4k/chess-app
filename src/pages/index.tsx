@@ -17,7 +17,11 @@ const Home: NextPage = () => {
   const createRoom = () => {
     addDoc(collection(db, "rooms"), {
       users: [user?.email],
+      host: user?.uid,
+      guest: "",
+      admin: user?.email,
       white: user?.email,
+      messages: [],
       positions: JSON.stringify(startingPositions),
       activePlayer: "white",
       enPassant: JSON.stringify({
@@ -37,10 +41,15 @@ const Home: NextPage = () => {
     const docRef = doc(db, "rooms", roomID);
     updateDoc(docRef, {
       users: arrayUnion(user?.email),
+      guest: user?.uid,
       black: user?.email,
     })
       .then(() => router.push(`/room/${roomID}`))
       .catch((err) => err && alert("Wrong room ID!"));
+  };
+
+  const clicked = () => {
+    console.log("ya");
   };
 
   return (
@@ -49,8 +58,8 @@ const Home: NextPage = () => {
         <title>Chess App</title>
       </Head>
       <main className={styles.container}>
-        <Card name="Create Room" onClick={createRoom} first={true} />
-        <Card name="Join Room" onClick={joinRoom} />
+        <Card content={<p>Create Room</p>} onClick={createRoom} first={true} />
+        <Card content={<p>Join Room</p>} onClick={joinRoom} />
       </main>
     </>
   );
