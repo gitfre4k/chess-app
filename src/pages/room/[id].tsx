@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, auth } from "../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, updateDoc } from "firebase/firestore";
 
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
 import Card from "../../components/Card/Card";
@@ -15,17 +16,14 @@ const Room = () => {
   const [start, setStart] = useState(false);
   const router = useRouter();
   const [user] = useAuthState(auth);
+  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
+  const [roomDataSnapshot] = useDocumentData(roomDocRef);
 
-  // useEffect(() => {
-  //   if (router.query.id && user) {
-  //     addDoc(collection(db, "messages"), {
-  //       timestamp: serverTimestamp(),
-  //       user: "chessApp",
-  //       roomID: router.query.id,
-  //       msg: user.displayName + " has joined!",
-  //     });
-  //   }
-  // }, [router.query.id, user]);
+  useEffect(() => {
+    if (roomDataSnapshot?.start) {
+      setStart(true);
+    }
+  }, [roomDataSnapshot?.start]);
 
   const sendMessage = (msg: string) => {
     if (router.query.id && user) {
@@ -39,7 +37,10 @@ const Room = () => {
   };
 
   const startGame = () => {
-    setStart(true);
+    // setStart(true);
+    updateDoc(roomDocRef, {
+      start: true,
+    });
   };
 
   return (

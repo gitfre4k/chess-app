@@ -19,6 +19,7 @@ const Home: NextPage = () => {
       users: [user?.email],
       host: user?.uid,
       guest: "",
+      start: false,
       admin: user?.email,
       white: user?.email,
       messages: [],
