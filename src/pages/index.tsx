@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       guest: "",
       start: false,
       admin: user?.email,
-      white: user?.email,
+      white: user?.uid,
       messages: [],
       positions: JSON.stringify(startingPositions),
       activePlayer: "white",
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
     updateDoc(docRef, {
       users: arrayUnion(user?.email),
       guest: user?.uid,
-      black: user?.email,
+      black: user?.uid,
     })
       .then(() => router.push(`/room/${roomID}`))
       .catch((err) => err && alert("Wrong room ID!"));

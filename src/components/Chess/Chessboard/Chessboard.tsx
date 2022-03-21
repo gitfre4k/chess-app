@@ -45,7 +45,7 @@ const Chessboard: React.FC = () => {
   }, [mate, check, activePlayer]);
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
-    if (roomDataSnapshot?.[activePlayer] !== user?.email) return;
+    if (roomDataSnapshot?.[activePlayer] !== user?.uid) return;
     if (mate || pawnPromotion) return;
     if (!selectedFigure && figure && activePlayer === figure.color) {
       selectFigure(figure, positions, enPassantMoves, castling);
@@ -136,7 +136,11 @@ const Chessboard: React.FC = () => {
             {renderPawnPromotions()}
           </div>
         ) : null}
-        <div className={styles.chessboard}>{renderChessboard()}</div>
+        <div className={styles.chessboard}>
+          {user?.uid === roomDataSnapshot?.white
+            ? renderChessboard()
+            : renderChessboard().reverse()}
+        </div>
       </div>
     </>
   );

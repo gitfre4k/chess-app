@@ -14,17 +14,19 @@ import styles from "../../styles/components/RoomSetup.module.scss";
 interface IRoomSetupProps {
   roomID: string;
   startGame: () => void;
+  changeColor: () => void;
 }
 
-const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, startGame }) => {
+const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }) => {
   const [host, setHost] = useState<{ [key: string]: string }>();
   const [guest, setGuest] = useState<{ [key: string]: string }>();
+  const [toggleColor, setToggleColor] = useState(false);
   const [user] = useAuthState(auth);
   const roomDocRef = doc(db, "rooms", roomID);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
 
   useEffect(() => {
-    const getHostSnap = async () => {
+    const updateRoomInfo = async () => {
       if (roomDataSnapshot) {
         const hostSnap = await getDoc(doc(db, "users", roomDataSnapshot.host));
         setHost(hostSnap.data());
@@ -32,14 +34,11 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, startGame }) => {
           const guestSnap = await getDoc(doc(db, "users", roomDataSnapshot.guest));
           setGuest(guestSnap.data());
         }
+        setToggleColor(roomDataSnapshot.host === roomDataSnapshot.white ? false : true);
       }
     };
-    getHostSnap();
+    updateRoomInfo();
   }, [roomDataSnapshot]);
-
-  // useEffect(() => {
-  //   console.log(host?.photoURL);
-  // }, [host]);
 
   const w8ting = (
     <div className={styles.waiting}>
@@ -56,20 +55,24 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, startGame }) => {
         <div className={styles.container}>
           <div className={styles.userInfo}>
             {host?.photoURL ? (
-              <div className={styles.image}>
-                <Image
-                  src={host.photoURL}
-                  alt="user photo"
-                  height="50%"
-                  width="50%"
-                  objectFit="contain"
-                />
-              </div>
+              <Image
+                src={host.photoURL}
+                alt="user photo"
+                height="50%"
+                width="50%"
+                objectFit="contain"
+              />
             ) : null}
             <p>{host?.name}</p>
           </div>
-          <div className={styles.hostFigure}>
-            <Image src={wKnight} alt="chess piece" height="100%" width="100%" objectFit="contain" />
+          <div className={styles.hostFigure + " " + styles.center}>
+            <Image
+              src={toggleColor ? bKnight : wKnight}
+              alt="chess piece"
+              height="100%"
+              width="100%"
+              objectFit="contain"
+            />
           </div>
         </div>
         <div className={styles.container}>
@@ -82,7 +85,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, startGame }) => {
                 <p>{guest?.name}</p>
               </div>
               <Image
-                src={bKnight}
+                src={toggleColor ? wKnight : bKnight}
                 alt="chess piece"
                 height="100%"
                 width="100%"
@@ -95,9 +98,14 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, startGame }) => {
         </div>
       </div>
       {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? (
-        <button className={styles.center} onClick={startGame}>
-          START GAME
-        </button>
+        <>
+          <button className={styles.center} onClick={changeColor}>
+            Change color
+          </button>
+          <button className={styles.center} onClick={startGame}>
+            START GAME
+          </button>
+        </>
       ) : null}
       {roomDataSnapshot?.guest === user?.uid ? (
         <p className={styles.center}>waiting for host to start a game...</p>

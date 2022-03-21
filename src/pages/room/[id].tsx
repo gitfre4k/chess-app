@@ -37,16 +37,27 @@ const Room = () => {
   };
 
   const startGame = () => {
-    // setStart(true);
     updateDoc(roomDocRef, {
       start: true,
+    });
+  };
+
+  const changeColor = () => {
+    const black = roomDataSnapshot?.white;
+    updateDoc(roomDocRef, {
+      white: roomDataSnapshot?.black,
+      black,
     });
   };
 
   return (
     <div className={styles.container}>
       <Chat sendMessage={sendMessage} />
-      {start ? <Chess /> : <RoomSetup roomID={`${router.query.id}`} startGame={startGame} />}
+      {start ? (
+        <Chess />
+      ) : (
+        <RoomSetup roomID={`${router.query.id}`} changeColor={changeColor} startGame={startGame} />
+      )}
     </div>
   );
 };
