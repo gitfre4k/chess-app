@@ -12,8 +12,9 @@ const Message: React.FC<IMessage> = ({ msgUserID, message }) => {
   const [user] = useAuthState(auth);
 
   const msgType = msgUserID === user?.uid ? styles.sender : styles.reciver;
+  const msgClassName = msgUserID === "SERVER" ? styles.server : styles.message + " " + msgType;
 
-  return <p className={styles.message + " " + msgType}>{message}</p>;
+  return <p className={msgClassName}>{message}</p>;
 };
 
 export default Message;

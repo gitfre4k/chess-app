@@ -25,6 +25,17 @@ const Room = () => {
     }
   }, [roomDataSnapshot?.start]);
 
+  useEffect(() => {
+    if (user) {
+      addDoc(collection(db, "messages"), {
+        timestamp: serverTimestamp(),
+        user: "SERVER",
+        roomID: router.query.id,
+        msg: user.displayName + " has joind the room.",
+      });
+    }
+  }, [user, router.query.id]);
+
   const sendMessage = (msg: string) => {
     if (router.query.id && user) {
       addDoc(collection(db, "messages"), {

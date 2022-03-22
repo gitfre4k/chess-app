@@ -98,14 +98,14 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
         </div>
       </div>
       {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? (
-        <>
+        <div className={styles.btn}>
           <button className={styles.center} onClick={changeColor}>
             Change color
           </button>
           <button className={styles.center} onClick={startGame}>
             START GAME
           </button>
-        </>
+        </div>
       ) : null}
       {roomDataSnapshot?.guest === user?.uid ? (
         <p className={styles.center}>waiting for host to start a game...</p>

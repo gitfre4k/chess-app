@@ -2,8 +2,7 @@
   position: absolute;
   width: 25vw;
   height: 60vh;
-  border: 2px solid white;
-  border-radius: 50px;
+
   right: 1vw;
   overflow: hidden;
   ::-webkit-scrollbar {
@@ -20,7 +19,8 @@
   }
   form {
     position: absolute;
-    bottom: 0;
+    bottom: 3vh;
+    visibility: hidden;
   }
   input {
     padding: 4px;
@@ -35,10 +35,14 @@
     display: inline-block;
     position: absolute;
     padding: 4px;
-    width: 6vw;
+    width: 4vw;
     border: 2px solid #ccc;
     border-bottom-right-radius: 50px;
-    text-align: start;
+  }
+  &:hover {
+    form {
+      visibility: visible;
+    }
   }
 }
 
