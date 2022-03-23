@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <p className={styles.logo}>Chess App</p>
+      <h2 className={styles.logo}>Chess App</h2>
       {user ? (
         <div className={styles.userInfo}>
           <p>{user?.displayName}</p>

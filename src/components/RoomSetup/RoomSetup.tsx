@@ -5,6 +5,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import Image from "next/image";
 import wKnight from "../../assets/images/wKnight.png";
 import bKnight from "../../assets/images/bKnight.png";
@@ -45,6 +46,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
       <p>Share this room ID with a friend.</p>
       <input value={roomID} readOnly />
       <button onClick={() => navigator.clipboard.writeText(roomID)}>Copy</button>
+      <LoadingIndicator pulse={true} />
       <p>W8ing 4 some1 to join...</p>
     </div>
   );
@@ -106,10 +108,15 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
             START GAME
           </button>
         </div>
-      ) : null}
-      {roomDataSnapshot?.guest === user?.uid ? (
+      ) : (
+        <div className={styles.loading}>
+          <p>Waiting for host to start a game...</p>
+          <LoadingIndicator pulse={true} />
+        </div>
+      )}
+      {/* {roomDataSnapshot?.guest === user?.uid ? (
         <p className={styles.center}>waiting for host to start a game...</p>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

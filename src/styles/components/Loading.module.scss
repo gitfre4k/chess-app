@@ -4,9 +4,9 @@
   position: relative;
   align-items: center;
   justify-content: center;
-  h2 {
-    position: absolute;
-    font-size: 60px;
-    z-index: 9;
-  }
+}
+
+.indicator {
+  position: absolute;
+  z-index: 9;
 }
