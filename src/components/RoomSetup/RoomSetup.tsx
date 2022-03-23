@@ -7,7 +7,7 @@ import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image";
 import wKnight from "../../assets/images/wKnight.png";
-import bKnight from "../../assets/images/bKinght.png";
+import bKnight from "../../assets/images/bKnight.png";
 
 import styles from "../../styles/components/RoomSetup.module.scss";
 

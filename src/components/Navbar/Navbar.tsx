@@ -9,8 +9,13 @@ const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <p>{user?.displayName}</p>
-      <button onClick={() => auth.signOut()}>SignOut</button>
+      <p className={styles.logo}>Chess App</p>
+      {user ? (
+        <div className={styles.userInfo}>
+          <p>{user?.displayName}</p>
+          <button onClick={() => auth.signOut()}>SignOut</button>
+        </div>
+      ) : null}
     </div>
   );
 };

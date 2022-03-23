@@ -4,6 +4,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, auth } from "../../firebase";
 import { collection, addDoc, serverTimestamp, doc, updateDoc } from "firebase/firestore";
+import { onDisconnect } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
 
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
 import Card from "../../components/Card/Card";
@@ -18,6 +20,8 @@ const Room = () => {
   const [user] = useAuthState(auth);
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (roomDataSnapshot?.start) {
@@ -34,6 +38,17 @@ const Room = () => {
         msg: user.displayName + " has joind the room.",
       });
     }
+    onAuthStateChanged(
+      auth,
+      (connected) =>
+        !connected &&
+        addDoc(collection(db, "messages"), {
+          timestamp: serverTimestamp(),
+          user: "SERVER",
+          roomID: router.query.id,
+          msg: user?.displayName + " has left the room.",
+        })
+    );
   }, [user, router.query.id]);
 
   const sendMessage = (msg: string) => {

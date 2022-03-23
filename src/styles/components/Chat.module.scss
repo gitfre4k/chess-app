@@ -20,27 +20,28 @@
   form {
     position: absolute;
     bottom: 3vh;
-    visibility: hidden;
+    :focus {
+      visibility: visible;
+    }
   }
   input {
     padding: 4px;
     padding-left: 25px;
     width: 21vw;
     display: inline-block;
-    border: 2px solid #ccc;
     border-bottom-left-radius: 50px;
     box-sizing: border-box;
+    visibility: hidden;
   }
   button {
     display: inline-block;
     position: absolute;
     padding: 4px;
     width: 4vw;
-    border: 2px solid #ccc;
     border-bottom-right-radius: 50px;
   }
   &:hover {
-    form {
+    input {
       visibility: visible;
     }
   }

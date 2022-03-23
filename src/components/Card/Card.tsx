@@ -1,6 +1,6 @@
 import Image from "next/image";
 import wKnighh from "../../assets/images/wKnight.png";
-import bKinght from "../../assets/images/bKinght.png";
+import bKinght from "../../assets/images/bKnight.png";
 
 import styles from "../../styles/components/Card.module.scss";
 

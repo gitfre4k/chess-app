@@ -32,11 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [user]);
 
   if (loading) return <Loading />;
-  if (!user) return <Login />;
   return (
     <>
       <Navbar />
-      <Component {...pageProps} />
+      {user ? <Component {...pageProps} /> : <Login />}
     </>
   );
 }
