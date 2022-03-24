@@ -17,4 +17,4 @@ const notations: () => [string[], [number, number][]] = () => {
 
 const [algebraicNotation, xyNotation] = notations();
 
-export { algebraicNotation, xyNotation };
+export { algebraicNotation, xyNotation, one2a };

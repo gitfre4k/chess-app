@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { getSquareClass, getFigure } from "./helpers";
+import { one2a } from "../../../constants/square-notation";
 
+import styles from "../../../styles/components/Square.module.scss";
 import { ISquareProps } from "./interfaces";
 
 const Square: React.FC<ISquareProps> = ({
@@ -12,6 +14,7 @@ const Square: React.FC<ISquareProps> = ({
   selectedFigure,
   validMoves,
   check,
+  rotated,
 }) => {
   const squareClass = getSquareClass(x, y, validMoves, check, piece);
   const figure = getFigure(x, y, piece);
@@ -27,6 +30,10 @@ const Square: React.FC<ISquareProps> = ({
       onClick={() => onClick(x, y, figure)}
     >
       {piece && <Image src={piece} alt="Chess figure" width="70px" height="70px" />}
+      {y === (rotated ? 1 : 8) ? (
+        <p className={styles.notationX}>{one2a(x).toUpperCase()}</p>
+      ) : null}
+      {x === (rotated ? 1 : 8) ? <p className={styles.notationY}>{y}</p> : null}
     </div>
   );
 };

@@ -13,6 +13,7 @@ export interface ISquareProps {
     white: boolean;
     black: boolean;
   };
+  rotated: boolean;
 }
 
 export interface ICheck {

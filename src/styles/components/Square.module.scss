@@ -1,6 +1,10 @@
 .square {
   width: 70px;
   height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .valid {
@@ -9,4 +13,14 @@
 
 .check {
   box-shadow: inset 0 0 25px red;
+}
+
+.notationX {
+  position: absolute;
+  padding-top: 84px;
+}
+
+.notationY {
+  position: absolute;
+  padding-right: 86px;
 }

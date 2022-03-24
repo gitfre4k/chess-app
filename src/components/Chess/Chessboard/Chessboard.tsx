@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { auth, db } from "../../../firebase";
@@ -20,6 +20,7 @@ const Chessboard: React.FC = () => {
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
   const [user] = useAuthState(auth);
+  const [rotateBoard, setRotateBoard] = useState(false);
 
   const { activePlayer, changePlayer } = hooks.useTurnSwitch();
   const { positions, updatePositions, upgradePawn } = hooks.usePositions();
@@ -29,6 +30,10 @@ const Chessboard: React.FC = () => {
   const { pawnPromotion, promotePawn, endPawnPromotion } = hooks.usePawnPromotion();
   const { check, mate, updateCheckStatus, checkForMate } = hooks.useCheckMate();
   const positionsRef = useRef(positions);
+
+  useEffect(() => {
+    setRotateBoard(user?.uid !== roomDataSnapshot?.white);
+  }, [roomDataSnapshot?.white, user?.uid]);
 
   useEffect(() => {
     positionsRef.current = positions;
@@ -98,6 +103,7 @@ const Chessboard: React.FC = () => {
           selectedFigure={selectedFigure}
           validMoves={validMoves}
           check={check}
+          rotated={rotateBoard}
         />
       );
     });
@@ -122,6 +128,7 @@ const Chessboard: React.FC = () => {
           selectedFigure={undefined}
           validMoves={["00"]}
           check={check}
+          rotated={rotateBoard}
         />
       );
     }
@@ -137,9 +144,7 @@ const Chessboard: React.FC = () => {
           </div>
         ) : null}
         <div className={styles.chessboard}>
-          {user?.uid === roomDataSnapshot?.white
-            ? renderChessboard()
-            : renderChessboard().reverse()}
+          {rotateBoard ? renderChessboard() : renderChessboard().reverse()}
         </div>
       </div>
     </>
