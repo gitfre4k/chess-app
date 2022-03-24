@@ -15,7 +15,11 @@ import isKingSafe from "./helpers/move-validity/isKingSafe";
 import { IFigure, IDestination } from "./interfaces";
 import styles from "../../../styles/components/Chessboard.module.scss";
 
-const Chessboard: React.FC = () => {
+interface IChessboardProps {
+  updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
+}
+
+const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard }) => {
   const router = useRouter();
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
@@ -68,7 +72,10 @@ const Chessboard: React.FC = () => {
         isKingSafe(moveInfo2, positions)
       ) {
         updatePositions(moveInfo, activePlayer, enPassantMoves);
+
+        updateNotationBoard(selectedFigure, x, y, !!positions[`${x}${y}`]);
         updateCastlingStatus(moveInfo);
+
         if (selectedFigure.name === "pawn" && (y === 8 || y === 1)) {
           figure && selectFigure(figure, positions, enPassantMoves, castling, true);
           promotePawn(`${x}${y}`);
@@ -122,7 +129,7 @@ const Chessboard: React.FC = () => {
           x={0}
           y={0}
           notation={"z0"}
-          squareColor={(i + y) % 2 === 0 ? "#441a03" : "#b5915f"}
+          squareColor={i % 2 === 0 ? "#441a03" : "#b5915f"}
           piece={y < 1 ? whiteFigures[i].src : blackFigures[i].src}
           onClick={promotionClickHandler}
           selectedFigure={undefined}
@@ -138,13 +145,9 @@ const Chessboard: React.FC = () => {
   return (
     <>
       <div className={styles.container}>
-        {pawnPromotion ? (
-          <div className={styles.promotions + " " + styles[activePlayer]}>
-            {renderPawnPromotions()}
-          </div>
-        ) : null}
+        {pawnPromotion ? <div className={styles.promotions}>{renderPawnPromotions()}</div> : null}
         <div className={styles.chessboard}>
-          {rotateBoard ? renderChessboard() : renderChessboard().reverse()}
+          {!rotateBoard ? renderChessboard() : renderChessboard().reverse()}
         </div>
       </div>
     </>

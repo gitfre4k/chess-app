@@ -1,0 +1,15 @@
+.container {
+  text-align: center;
+  width: 20vw;
+  height: 20vh;
+  position: absolute;
+  left: 1rem;
+  z-index: 200;
+  p {
+    margin: 0;
+  }
+}
+
+.even {
+  background-color: rgb(12, 12, 12);
+}

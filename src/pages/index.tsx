@@ -33,6 +33,7 @@ const Home: NextPage = () => {
         white: { short: true, long: true },
         black: { short: true, long: true },
       }),
+      notation: [],
     }).then((room) => router.push(`/room/${room.id}`));
   };
 
@@ -47,10 +48,6 @@ const Home: NextPage = () => {
     })
       .then(() => router.push(`/room/${roomID}`))
       .catch((err) => err && alert("Wrong room ID!"));
-  };
-
-  const clicked = () => {
-    console.log("ya");
   };
 
   return (

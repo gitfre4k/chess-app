@@ -11,17 +11,25 @@ import RoomSetup from "../../components/RoomSetup/RoomSetup";
 import Card from "../../components/Card/Card";
 import Chess from "../../components/Chess";
 import Chat from "../../components/Chat/Chat";
+import NotationBoard from "../../components/NotationBoard/NotationBoard";
+import { one2a } from "../../constants/square-notation";
 
 import styles from "../../styles/pages/room.module.scss";
+import { IFigure } from "../../components/Chess/Chessboard/interfaces";
 
 const Room = () => {
+  const [notation, setNotation] = useState<any[]>([]);
   const [start, setStart] = useState(false);
   const router = useRouter();
   const [user] = useAuthState(auth);
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (roomDataSnapshot?.notation) {
+      setNotation(roomDataSnapshot.notation);
+    }
+  }, [roomDataSnapshot?.notation]);
 
   useEffect(() => {
     if (roomDataSnapshot?.start) {
@@ -76,11 +84,57 @@ const Room = () => {
     });
   };
 
+  const figureNotation = (figure: IFigure) => {
+    switch (figure.name) {
+      case "bishop":
+        return "B";
+      case "knight":
+        return "N";
+      case "rook":
+        return "R";
+      case "queen":
+        return "Q";
+      case "king":
+        return "K";
+      default:
+        return "";
+    }
+  };
+
+  const updateNotationBoard = (figure: IFigure, x: number, y: number, captured: boolean) => {
+    if (figure.name === "king" && Math.abs(figure.x - x) === 2) {
+      setNotation((prevValue) => [...prevValue, x === 7 ? "0-0" : "0-0-0"]);
+      return;
+    }
+    const figureName =
+      captured && figure.name === "pawn" ? one2a(figure.x) : figureNotation(figure);
+    const squareNotation = `${one2a(x)}${y}`;
+
+    const move = figureName + (captured ? "x" : "") + squareNotation;
+    setNotation((prevValue) => {
+      if (figure.color === "white") {
+        updateDoc(roomDocRef, {
+          notation: [...prevValue, move],
+        });
+        return [...prevValue, move];
+      }
+      const newValue = [...prevValue];
+      newValue[newValue.length - 1] = newValue[newValue.length - 1] + " " + move;
+      updateDoc(roomDocRef, {
+        notation: newValue,
+      });
+      return newValue;
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Chat sendMessage={sendMessage} />
       {start ? (
-        <Chess />
+        <>
+          <NotationBoard figures={notation} />
+          <Chess updateNotationBoard={updateNotationBoard} />
+        </>
       ) : (
         <RoomSetup roomID={`${router.query.id}`} changeColor={changeColor} startGame={startGame} />
       )}

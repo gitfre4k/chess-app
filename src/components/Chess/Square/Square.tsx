@@ -30,10 +30,10 @@ const Square: React.FC<ISquareProps> = ({
       onClick={() => onClick(x, y, figure)}
     >
       {piece && <Image src={piece} alt="Chess figure" width="70px" height="70px" />}
-      {y === (rotated ? 1 : 8) ? (
+      {y === (rotated ? 8 : 1) ? (
         <p className={styles.notationX}>{one2a(x).toUpperCase()}</p>
       ) : null}
-      {x === (rotated ? 1 : 8) ? <p className={styles.notationY}>{y}</p> : null}
+      {x === (rotated ? 8 : 1) ? <p className={styles.notationY}>{y}</p> : null}
     </div>
   );
 };
