@@ -2,8 +2,8 @@
   position: absolute;
   width: 25vw;
   height: 60vh;
-
   right: 1vw;
+  bottom: 0;
   overflow: hidden;
   ::-webkit-scrollbar {
     width: 0.5vw;
@@ -20,9 +20,6 @@
   form {
     position: absolute;
     bottom: 3vh;
-    :focus {
-      visibility: visible;
-    }
   }
   input {
     padding: 4px;
@@ -31,7 +28,8 @@
     display: inline-block;
     border-bottom-left-radius: 50px;
     box-sizing: border-box;
-    visibility: hidden;
+    background-color: rgb(12, 12, 12);
+    color: white;
   }
   button {
     display: inline-block;
@@ -39,11 +37,8 @@
     padding: 4px;
     width: 4vw;
     border-bottom-right-radius: 50px;
-  }
-  &:hover {
-    input {
-      visibility: visible;
-    }
+    background-color: rgb(24, 24, 24);
+    color: white;
   }
 }
 

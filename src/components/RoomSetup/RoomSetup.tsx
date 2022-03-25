@@ -5,6 +5,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { auth, db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import UserInfo from "../UserInfo/UserInfo";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import Image from "next/image";
 import wKnight from "../../assets/images/wKnight.png";
@@ -55,18 +56,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
     <div className={styles.wrrraper}>
       <div className={styles.wraper}>
         <div className={styles.container}>
-          <div className={styles.userInfo}>
-            {host?.photoURL ? (
-              <Image
-                src={host.photoURL}
-                alt="user photo"
-                height="50%"
-                width="50%"
-                objectFit="contain"
-              />
-            ) : null}
-            <p>{host?.name}</p>
-          </div>
+          <UserInfo user={host} />
           <div className={styles.hostFigure + " " + styles.center}>
             <Image
               src={toggleColor ? bKnight : wKnight}
@@ -80,12 +70,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
         <div className={styles.container}>
           {roomDataSnapshot?.guest ? (
             <>
-              <div className={styles.userInfo}>
-                {guest?.photoURL ? (
-                  <Image src={guest.photoURL} alt="user photo" height="50%" width="50%" />
-                ) : null}
-                <p>{guest?.name}</p>
-              </div>
+              <UserInfo user={guest} />
               <Image
                 src={toggleColor ? wKnight : bKnight}
                 alt="chess piece"
