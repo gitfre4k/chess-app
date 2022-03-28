@@ -7,6 +7,8 @@ import { doc } from "firebase/firestore";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
+import UserInfo from "../../UserInfo/UserInfo";
+import Clock from "../../Clock/Clock";
 import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
 import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
@@ -17,9 +19,11 @@ import styles from "../../../styles/components/Chessboard.module.scss";
 
 interface IChessboardProps {
   updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
+  host?: { [key: string]: string };
+  guest?: { [key: string]: string };
 }
 
-const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard }) => {
+const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, guest }) => {
   const router = useRouter();
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
@@ -117,6 +121,8 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard }) => {
     return chessboard;
   };
 
+  // "#441a03" : "#b5915f"
+
   const renderPawnPromotions = () => {
     const promotions: JSX.Element[] = [];
     const whiteFigures = [f.WhiteQueen, f.WhiteKnight, f.WhiteRook, f.WhiteBishop];
@@ -142,12 +148,21 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard }) => {
     return promotions;
   };
 
+  const usersInfo = [
+    <UserInfo user={guest} key={"guest"} />,
+    <Clock key={"clock"} />,
+    <UserInfo user={host} key={"host"} />,
+  ];
+
   return (
     <>
       <div className={styles.container}>
         {pawnPromotion ? <div className={styles.promotions}>{renderPawnPromotions()}</div> : null}
         <div className={styles.chessboard}>
           {!rotateBoard ? renderChessboard() : renderChessboard().reverse()}
+        </div>
+        <div className={styles.userInfo}>
+          {roomDataSnapshot && !rotateBoard ? usersInfo : usersInfo.reverse()}
         </div>
       </div>
     </>

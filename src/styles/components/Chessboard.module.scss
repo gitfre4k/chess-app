@@ -1,5 +1,7 @@
 .container {
   display: flex;
+  position: absolute;
+  left: 2vw;
 }
 
 .chessboard {
@@ -17,4 +19,13 @@
   border: 16px solid #7d694c;
   top: -70px;
   border-bottom: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1vw;
+  :last-child {
+    margin-top: auto;
+  }
 }

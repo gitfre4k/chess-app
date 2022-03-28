@@ -13,12 +13,19 @@
 .wraper {
   display: flex;
   justify-content: center;
-  border: 2px solid white;
+  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
   border-radius: 50px;
 }
 
 .hostFigure {
+  margin-top: auto;
+  margin-bottom: auto;
   transform: scaleX(-1);
+}
+
+.guestFigure {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .waiting {
@@ -26,8 +33,36 @@
   flex-direction: column;
   text-align: center;
   align-items: center;
-  button {
-    margin-bottom: 1rem;
+}
+
+.copyBtn {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  border-radius: 50px;
+  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
+  width: 50%;
+  padding: 0.5rem;
+  transition: 0.7s;
+  &:hover {
+    border: 2px;
+    cursor: pointer;
+    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
+    transition: 0.3s;
+  }
+}
+
+.hostBtn {
+  border-radius: 50px;
+  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
+  width: 10vw;
+  padding: 0.5rem;
+  transition: 0.7s;
+  text-align: center;
+  &:hover {
+    border: 2px;
+    cursor: pointer;
+    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
+    transition: 0.3s;
   }
 }
 
@@ -42,12 +77,13 @@
   align-items: center;
 }
 
-.btn {
+.hostOptions {
   display: flex;
   flex-direction: column;
   position: absolute;
   bottom: 3vh;
   gap: 0.5rem;
+  color: white;
 }
 
 .loading {

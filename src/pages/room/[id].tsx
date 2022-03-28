@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, auth } from "../../firebase";
-import { collection, addDoc, serverTimestamp, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from "firebase/firestore";
 import { onDisconnect } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -24,6 +24,22 @@ const Room = () => {
   const [user] = useAuthState(auth);
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
+  const [host, setHost] = useState<{ [key: string]: string }>();
+  const [guest, setGuest] = useState<{ [key: string]: string }>();
+
+  useEffect(() => {
+    const updateRoomInfo = async () => {
+      if (roomDataSnapshot) {
+        const hostSnap = await getDoc(doc(db, "users", roomDataSnapshot.host));
+        setHost(hostSnap.data());
+        if (roomDataSnapshot.guest) {
+          const guestSnap = await getDoc(doc(db, "users", roomDataSnapshot.guest));
+          setGuest(guestSnap.data());
+        }
+      }
+    };
+    updateRoomInfo();
+  }, [roomDataSnapshot]);
 
   useEffect(() => {
     if (roomDataSnapshot?.notation) {
@@ -133,7 +149,7 @@ const Room = () => {
       {start ? (
         <>
           <NotationBoard figures={notation} />
-          <Chess updateNotationBoard={updateNotationBoard} />
+          <Chess updateNotationBoard={updateNotationBoard} host={host} guest={guest} />
         </>
       ) : (
         <RoomSetup roomID={`${router.query.id}`} changeColor={changeColor} startGame={startGame} />

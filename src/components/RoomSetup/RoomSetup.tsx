@@ -46,7 +46,9 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
     <div className={styles.waiting}>
       <p>Share this room ID with a friend.</p>
       <input value={roomID} readOnly />
-      <button onClick={() => navigator.clipboard.writeText(roomID)}>Copy</button>
+      <div onClick={() => navigator.clipboard.writeText(roomID)} className={styles.copyBtn}>
+        Copy
+      </div>
       <LoadingIndicator pulse={true} />
       <p>W8ing 4 some1 to join...</p>
     </div>
@@ -71,13 +73,15 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
           {roomDataSnapshot?.guest ? (
             <>
               <UserInfo user={guest} />
-              <Image
-                src={toggleColor ? wKnight : bKnight}
-                alt="chess piece"
-                height="100%"
-                width="100%"
-                objectFit="contain"
-              />
+              <div className={styles.guestFigure + " " + styles.center}>
+                <Image
+                  src={toggleColor ? wKnight : bKnight}
+                  alt="chess piece"
+                  height="100%"
+                  width="100%"
+                  objectFit="contain"
+                />
+              </div>
             </>
           ) : (
             w8ting
@@ -85,13 +89,13 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
         </div>
       </div>
       {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? (
-        <div className={styles.btn}>
-          <button className={styles.center} onClick={changeColor}>
+        <div className={styles.hostOptions}>
+          <div className={styles.hostBtn} onClick={changeColor}>
             Change color
-          </button>
-          <button className={styles.center} onClick={startGame}>
+          </div>
+          <div className={styles.hostBtn} onClick={startGame}>
             START GAME
-          </button>
+          </div>
         </div>
       ) : null}
       {roomDataSnapshot?.guest === user?.uid ? (
