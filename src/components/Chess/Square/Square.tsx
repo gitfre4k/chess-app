@@ -6,7 +6,6 @@ import styles from "../../../styles/components/Square.module.scss";
 import { ISquareProps } from "./interfaces";
 
 const Square: React.FC<ISquareProps> = ({
-  squareColor,
   x,
   y,
   piece,
@@ -23,9 +22,7 @@ const Square: React.FC<ISquareProps> = ({
     <div
       className={squareClass}
       style={
-        selectedFigure?.x === x && selectedFigure.y === y
-          ? { background: "green" }
-          : { background: squareColor }
+        selectedFigure?.x === x && selectedFigure.y === y ? { background: "green" } : undefined
       }
       onClick={() => onClick(x, y, figure)}
     >

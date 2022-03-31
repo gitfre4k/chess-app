@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import UserInfo from "../UserInfo/UserInfo";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
@@ -12,20 +9,31 @@ import wKnight from "../../assets/images/wKnight.png";
 import bKnight from "../../assets/images/bKnight.png";
 
 import styles from "../../styles/components/RoomSetup.module.scss";
+import { User } from "firebase/auth";
+import { DocumentData } from "firebase/firestore";
 
 interface IRoomSetupProps {
   roomID: string;
   startGame: () => void;
   changeColor: () => void;
+  user: User | null | undefined;
+  roomDataSnapshot: DocumentData | undefined;
+  setClock: (time: string) => void;
 }
 
-const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }) => {
+const RoomSetup: React.FC<IRoomSetupProps> = ({
+  roomID,
+  changeColor,
+  startGame,
+  user,
+  roomDataSnapshot,
+  setClock,
+}) => {
   const [host, setHost] = useState<{ [key: string]: string }>();
   const [guest, setGuest] = useState<{ [key: string]: string }>();
   const [toggleColor, setToggleColor] = useState(false);
-  const [user] = useAuthState(auth);
-  const roomDocRef = doc(db, "rooms", roomID);
-  const [roomDataSnapshot] = useDocumentData(roomDocRef);
+  const timeIndex = useMemo(() => ["", "1:00", "3:00", "5:00"], []);
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     const updateRoomInfo = async () => {
@@ -53,6 +61,21 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
       <p>W8ing 4 some1 to join...</p>
     </div>
   );
+
+  const changeTime = (increment: boolean) => {
+    if (increment)
+      setTime((prevValue) => {
+        const newValue = prevValue === timeIndex.length - 1 ? 0 : prevValue + 1;
+        setClock(timeIndex[newValue]);
+        return newValue;
+      });
+    else
+      setTime((prevValue) => {
+        const newValue = prevValue === 0 ? timeIndex.length - 1 : prevValue - 1;
+        setClock(timeIndex[newValue]);
+        return newValue;
+      });
+  };
 
   return (
     <div className={styles.wrrraper}>
@@ -90,6 +113,15 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
       </div>
       {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? (
         <div className={styles.hostOptions}>
+          <div className={styles.clock}>
+            <div className={styles.clockBtn} onClick={() => changeTime(false)}>
+              -
+            </div>
+            <p>{timeIndex[time]}</p>
+            <div className={styles.clockBtn} onClick={() => changeTime(true)}>
+              +
+            </div>
+          </div>
           <div className={styles.hostBtn} onClick={changeColor}>
             Change color
           </div>
@@ -102,6 +134,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, changeColor, startGame }
         <div className={styles.loading}>
           <p>Waiting for host to start a game...</p>
           <LoadingIndicator pulse={true} />
+          <p>{roomDataSnapshot?.clock.white}</p>
         </div>
       ) : null}
     </div>

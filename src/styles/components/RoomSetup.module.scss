@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 30vh;
+  height: 40vh;
   width: 20vw;
   position: relative;
   font-size: large;
@@ -91,6 +91,34 @@
   flex-direction: column;
   position: absolute;
   justify-content: center;
-  height: 40vh;
   align-items: center;
+  height: 50vh;
+  align-items: center;
+  :last-child {
+    padding-top: 3vh;
+  }
+}
+
+.clock {
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 10vw;
+}
+
+.clockBtn {
+  text-align: center;
+  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
+    transition: 0.7s;
+    width: 4vw;
+    height: 5vh;
+    border-radius: 50px;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
+    transition: 0.3s;
+    border: 2px;
+  }
 }

@@ -34,6 +34,10 @@ const Home: NextPage = () => {
         black: { short: true, long: true },
       }),
       notation: [],
+      clock: {
+        white: "",
+        black: "",
+      },
     }).then((room) => router.push(`/room/${room.id}`));
   };
 

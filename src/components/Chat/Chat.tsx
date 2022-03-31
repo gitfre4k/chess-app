@@ -50,7 +50,6 @@ const Chat: React.FC<IChat> = ({ sendMessage }) => {
     <div className={styles.container}>
       <div className={styles.messages}>
         {showMessages()}
-
         <div ref={endOfMessagesRef}></div>
       </div>
       <form onSubmit={submitHandler}>

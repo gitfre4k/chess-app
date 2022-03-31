@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -8,7 +8,6 @@ import { onDisconnect } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
-import Card from "../../components/Card/Card";
 import Chess from "../../components/Chess";
 import Chat from "../../components/Chat/Chat";
 import NotationBoard from "../../components/NotationBoard/NotationBoard";
@@ -24,17 +23,22 @@ const Room = () => {
   const [user] = useAuthState(auth);
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
   const [roomDataSnapshot] = useDocumentData(roomDocRef);
-  const [host, setHost] = useState<{ [key: string]: string }>();
-  const [guest, setGuest] = useState<{ [key: string]: string }>();
+  const [whitePlayer, setWhitePlayer] = useState<{ [key: string]: string }>();
+  const [blackPlayer, setBlackPlayer] = useState<{ [key: string]: string }>();
 
   useEffect(() => {
     const updateRoomInfo = async () => {
       if (roomDataSnapshot) {
         const hostSnap = await getDoc(doc(db, "users", roomDataSnapshot.host));
-        setHost(hostSnap.data());
-        if (roomDataSnapshot.guest) {
-          const guestSnap = await getDoc(doc(db, "users", roomDataSnapshot.guest));
-          setGuest(guestSnap.data());
+        const guestSnap = roomDataSnapshot.guest
+          ? await getDoc(doc(db, "users", roomDataSnapshot.guest))
+          : undefined;
+        if (roomDataSnapshot.host === roomDataSnapshot.white) {
+          setWhitePlayer(hostSnap.data());
+          setBlackPlayer(guestSnap?.data());
+        } else {
+          setWhitePlayer(guestSnap?.data());
+          setBlackPlayer(hostSnap.data());
         }
       }
     };
@@ -100,6 +104,32 @@ const Room = () => {
     });
   };
 
+  const setClock = useCallback(
+    (time: string) => {
+      updateDoc(roomDocRef, {
+        clock: {
+          white: time,
+          black: time,
+        },
+      });
+    },
+    [roomDocRef]
+  );
+
+  const updateClock = useCallback(
+    (player: "white" | "black", timeLeft: string) => {
+      // if (!roomDataSnapshot?.clock) return;
+      const clockData = roomDataSnapshot?.clock;
+      updateDoc(roomDocRef, {
+        clock: {
+          ...clockData,
+          [player]: timeLeft,
+        },
+      });
+    },
+    [roomDocRef, roomDataSnapshot?.clock]
+  );
+
   const figureNotation = (figure: IFigure) => {
     switch (figure.name) {
       case "bishop":
@@ -149,10 +179,24 @@ const Room = () => {
       {start ? (
         <>
           <NotationBoard figures={notation} />
-          <Chess updateNotationBoard={updateNotationBoard} host={host} guest={guest} />
+          <Chess
+            updateNotationBoard={updateNotationBoard}
+            whitePlayer={whitePlayer}
+            blackPlayer={blackPlayer}
+            roomDataSnapshot={roomDataSnapshot}
+            user={user}
+            updateClock={updateClock}
+          />
         </>
       ) : (
-        <RoomSetup roomID={`${router.query.id}`} changeColor={changeColor} startGame={startGame} />
+        <RoomSetup
+          roomID={`${router.query.id}`}
+          changeColor={changeColor}
+          startGame={startGame}
+          user={user}
+          roomDataSnapshot={roomDataSnapshot}
+          setClock={setClock}
+        />
       )}
     </div>
   );

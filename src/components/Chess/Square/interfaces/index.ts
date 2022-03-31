@@ -1,7 +1,6 @@
 import { IFigure } from "../../Chessboard/interfaces";
 
 export interface ISquareProps {
-  squareColor: string;
   x: number;
   y: number;
   notation: string;

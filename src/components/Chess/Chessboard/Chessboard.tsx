@@ -1,9 +1,6 @@
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { auth, db } from "../../../firebase";
-import { doc } from "firebase/firestore";
+import { auth } from "../../../firebase";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
@@ -15,19 +12,27 @@ import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
 import { IFigure, IDestination } from "./interfaces";
+import { DocumentData } from "firebase/firestore";
+import { User } from "firebase/auth";
 import styles from "../../../styles/components/Chessboard.module.scss";
 
 interface IChessboardProps {
   updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
-  host?: { [key: string]: string };
-  guest?: { [key: string]: string };
+  whitePlayer?: { [key: string]: string };
+  blackPlayer?: { [key: string]: string };
+  roomDataSnapshot: DocumentData | undefined;
+  user: User | null | undefined;
+  updateClock: (player: "white" | "black", timeLeft: string) => void;
 }
 
-const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, guest }) => {
-  const router = useRouter();
-  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
-  const [roomDataSnapshot] = useDocumentData(roomDocRef);
-  const [user] = useAuthState(auth);
+const Chessboard: React.FC<IChessboardProps> = ({
+  updateNotationBoard,
+  whitePlayer,
+  blackPlayer,
+  roomDataSnapshot,
+  user,
+  updateClock,
+}) => {
   const [rotateBoard, setRotateBoard] = useState(false);
 
   const { activePlayer, changePlayer } = hooks.useTurnSwitch();
@@ -108,7 +113,6 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, gue
           x={square[0]}
           y={square[1]}
           notation={algebraicNotation[index]}
-          squareColor={(square[0] + square[1]) % 2 === 0 ? "#441a03" : "#b5915f"}
           piece={positions[`${square[0]}${square[1]}`]}
           onClick={squareClickHandler}
           selectedFigure={selectedFigure}
@@ -135,7 +139,6 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, gue
           x={0}
           y={0}
           notation={"z0"}
-          squareColor={i % 2 === 0 ? "#441a03" : "#b5915f"}
           piece={y < 1 ? whiteFigures[i].src : blackFigures[i].src}
           onClick={promotionClickHandler}
           selectedFigure={undefined}
@@ -148,11 +151,33 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, gue
     return promotions;
   };
 
-  const usersInfo = [
-    <UserInfo user={guest} key={"guest"} />,
-    <Clock key={"clock"} />,
-    <UserInfo user={host} key={"host"} />,
-  ];
+  const whitePlayerInfo = (
+    <div>
+      <UserInfo user={whitePlayer} />,
+      <Clock
+        start={activePlayer === "white"}
+        player={"white"}
+        user={user?.uid === roomDataSnapshot?.white}
+        roomDataSnapshot={roomDataSnapshot}
+        updateClock={updateClock}
+      />
+      ,
+    </div>
+  );
+
+  const blackPlayerInfo = (
+    <div>
+      <UserInfo user={blackPlayer} />,
+      <Clock
+        start={activePlayer === "black"}
+        player={"black"}
+        user={user?.uid === roomDataSnapshot?.black}
+        roomDataSnapshot={roomDataSnapshot}
+        updateClock={updateClock}
+      />
+      ,
+    </div>
+  );
 
   return (
     <>
@@ -161,8 +186,18 @@ const Chessboard: React.FC<IChessboardProps> = ({ updateNotationBoard, host, gue
         <div className={styles.chessboard}>
           {!rotateBoard ? renderChessboard() : renderChessboard().reverse()}
         </div>
-        <div className={styles.userInfo}>
-          {roomDataSnapshot && !rotateBoard ? usersInfo : usersInfo.reverse()}
+        <div className={styles.usersInfo}>
+          {roomDataSnapshot && !rotateBoard ? (
+            <>
+              {blackPlayerInfo}
+              {whitePlayerInfo}
+            </>
+          ) : (
+            <>
+              {whitePlayerInfo}
+              {blackPlayerInfo}
+            </>
+          )}
         </div>
       </div>
     </>
