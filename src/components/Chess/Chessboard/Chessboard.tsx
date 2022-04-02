@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../firebase";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
@@ -14,7 +12,9 @@ import isKingSafe from "./helpers/move-validity/isKingSafe";
 import { IFigure, IDestination } from "./interfaces";
 import { DocumentData } from "firebase/firestore";
 import { User } from "firebase/auth";
+
 import styles from "../../../styles/components/Chessboard.module.scss";
+import { DocumentReference } from "firebase/firestore";
 
 interface IChessboardProps {
   updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
@@ -23,6 +23,7 @@ interface IChessboardProps {
   roomDataSnapshot: DocumentData | undefined;
   user: User | null | undefined;
   updateClock: (player: "white" | "black", timeLeft: string) => void;
+  roomDocRef: DocumentReference;
 }
 
 const Chessboard: React.FC<IChessboardProps> = ({
@@ -32,10 +33,11 @@ const Chessboard: React.FC<IChessboardProps> = ({
   roomDataSnapshot,
   user,
   updateClock,
+  roomDocRef,
 }) => {
   const [rotateBoard, setRotateBoard] = useState(false);
 
-  const { activePlayer, changePlayer } = hooks.useTurnSwitch();
+  const { activePlayer, changePlayer } = hooks.useTurnSwitch(roomDataSnapshot, roomDocRef);
   const { positions, updatePositions, upgradePawn } = hooks.usePositions();
   const { selectedFigure, validMoves, selectFigure, deselectFigure } = hooks.useFigure();
   const { enPassantMoves, checkForEnPassant, preventEnPassant } = hooks.useEnPassant();

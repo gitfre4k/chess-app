@@ -9,10 +9,6 @@ import wKnight from "../assets/images/wKnight.png";
 import styles from "../styles/pages/login.module.scss";
 
 const Login = () => {
-  const clickHandler = () => {
-    signInWithPopup(auth, provider).catch(alert);
-  };
-
   return (
     <>
       <Head>
@@ -26,7 +22,7 @@ const Login = () => {
         </div>
         <p>Play chess online with your friends!</p>
         <p>In order to host or join a room, please sign in.</p>
-        <button onClick={clickHandler}>Sign in with Google</button>
+        <button onClick={() => signInWithPopup(auth, provider)}>Sign in with Google</button>
       </div>
     </>
   );

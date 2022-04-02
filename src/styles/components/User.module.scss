@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 40vh;
+  width: 20vw;
+  font-size: large;
+  color: white;
+}
+
+.img {
+  position: relative;
+  height: 20vh;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.rotate {
+  transform: scaleX(-1);
+}

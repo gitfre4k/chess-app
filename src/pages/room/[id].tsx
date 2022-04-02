@@ -4,7 +4,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db, auth } from "../../firebase";
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from "firebase/firestore";
-import { onDisconnect } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
@@ -27,7 +26,7 @@ const Room = () => {
   const [blackPlayer, setBlackPlayer] = useState<{ [key: string]: string }>();
 
   useEffect(() => {
-    const updateRoomInfo = async () => {
+    const getPlayers = async () => {
       if (roomDataSnapshot) {
         const hostSnap = await getDoc(doc(db, "users", roomDataSnapshot.host));
         const guestSnap = roomDataSnapshot.guest
@@ -42,7 +41,7 @@ const Room = () => {
         }
       }
     };
-    updateRoomInfo();
+    getPlayers();
   }, [roomDataSnapshot]);
 
   useEffect(() => {
@@ -58,14 +57,6 @@ const Room = () => {
   }, [roomDataSnapshot?.start]);
 
   useEffect(() => {
-    if (user) {
-      addDoc(collection(db, "messages"), {
-        timestamp: serverTimestamp(),
-        user: "SERVER",
-        roomID: router.query.id,
-        msg: user.displayName + " has joind the room.",
-      });
-    }
     onAuthStateChanged(
       auth,
       (connected) =>
@@ -79,46 +70,8 @@ const Room = () => {
     );
   }, [user, router.query.id]);
 
-  const sendMessage = (msg: string) => {
-    if (router.query.id && user) {
-      addDoc(collection(db, "messages"), {
-        timestamp: serverTimestamp(),
-        user: user.uid,
-        roomID: router.query.id,
-        msg,
-      });
-    }
-  };
-
-  const startGame = () => {
-    updateDoc(roomDocRef, {
-      start: true,
-    });
-  };
-
-  const changeColor = () => {
-    const black = roomDataSnapshot?.white;
-    updateDoc(roomDocRef, {
-      white: roomDataSnapshot?.black,
-      black,
-    });
-  };
-
-  const setClock = useCallback(
-    (time: string) => {
-      updateDoc(roomDocRef, {
-        clock: {
-          white: time,
-          black: time,
-        },
-      });
-    },
-    [roomDocRef]
-  );
-
   const updateClock = useCallback(
     (player: "white" | "black", timeLeft: string) => {
-      // if (!roomDataSnapshot?.clock) return;
       const clockData = roomDataSnapshot?.clock;
       updateDoc(roomDocRef, {
         clock: {
@@ -175,7 +128,7 @@ const Room = () => {
 
   return (
     <div className={styles.container}>
-      <Chat sendMessage={sendMessage} />
+      <Chat />
       {start ? (
         <>
           <NotationBoard figures={notation} />
@@ -186,17 +139,11 @@ const Room = () => {
             roomDataSnapshot={roomDataSnapshot}
             user={user}
             updateClock={updateClock}
+            roomDocRef={roomDocRef}
           />
         </>
       ) : (
-        <RoomSetup
-          roomID={`${router.query.id}`}
-          changeColor={changeColor}
-          startGame={startGame}
-          user={user}
-          roomDataSnapshot={roomDataSnapshot}
-          setClock={setClock}
-        />
+        <RoomSetup roomID={`${router.query.id}`} user={user} roomDataSnapshot={roomDataSnapshot} />
       )}
     </div>
   );

@@ -1,73 +1,8 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  height: 40vh;
-  width: 20vw;
-  position: relative;
-  font-size: large;
-  margin: 7px 6px;
-  color: white;
-}
-
 .wraper {
   display: flex;
   justify-content: center;
   box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
   border-radius: 50px;
-}
-
-.hostFigure {
-  margin-top: auto;
-  margin-bottom: auto;
-  transform: scaleX(-1);
-}
-
-.guestFigure {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.waiting {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-}
-
-.copyBtn {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  border-radius: 50px;
-  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
-  width: 50%;
-  padding: 0.5rem;
-  transition: 0.7s;
-  &:hover {
-    border: 2px;
-    cursor: pointer;
-    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
-    transition: 0.3s;
-  }
-}
-
-.hostBtn {
-  border-radius: 50px;
-  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
-  width: 10vw;
-  padding: 0.5rem;
-  transition: 0.7s;
-  text-align: center;
-  &:hover {
-    border: 2px;
-    cursor: pointer;
-    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
-    transition: 0.3s;
-  }
-}
-
-.center {
-  align-self: center;
 }
 
 .wrrraper {
@@ -77,48 +12,18 @@
   align-items: center;
 }
 
-.hostOptions {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 3vh;
-  gap: 0.5rem;
-  color: white;
-}
-
 .loading {
+  padding-top: 11vh;
   display: flex;
   flex-direction: column;
   position: absolute;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 40vh;
   align-items: center;
   :last-child {
-    padding-top: 3vh;
-  }
-}
-
-.clock {
-  display: flex;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 10vw;
-}
-
-.clockBtn {
-  text-align: center;
-  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
-    transition: 0.7s;
-    width: 4vw;
-    height: 5vh;
-    border-radius: 50px;
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
-    transition: 0.3s;
-    border: 2px;
+    text-align: center;
+    padding: 0;
+    margin-top: auto;
   }
 }
