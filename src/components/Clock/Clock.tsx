@@ -2,6 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { DocumentData } from "firebase/firestore";
+import TimerIcon from "../TimerIcon";
+
+import styles from "../../styles/components/Clock.module.scss";
 
 interface IClockProps {
   start: boolean;
@@ -51,7 +54,8 @@ const Clock: React.FC<IClockProps> = ({ start, player, user, roomDataSnapshot, u
   return (
     <>
       {roomDataSnapshot?.clock.white ? (
-        <div>
+        <div className={styles.clock}>
+          <TimerIcon />
           <p>{user ? userOutput : timeLeft}</p>
         </div>
       ) : null}

@@ -1,3 +1,10 @@
-// .clock {
-//   position: absolute;
-// }
+.clock {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding-left: 0.5vw;
+  p {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}

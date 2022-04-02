@@ -5,6 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import User from "./User";
 import WaitingForGuest from "./WaitingForGuest";
+import WaitingForHost from "./WaitingForHost";
 import HostScreen from "./HostScreen";
 
 import styles from "../../styles/components/RoomSetup.module.scss";
@@ -49,16 +50,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomDataSnapshot }
       </div>
       {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? <HostScreen /> : null}
       {roomDataSnapshot?.guest === user?.uid ? (
-        <div className={styles.loading}>
-          <p>Waiting for host to start a game...</p>
-          <LoadingIndicator pulse={true} />
-          <div>
-            <p>Settings:</p>
-            <p>
-              Clock: {roomDataSnapshot?.clock.white ? roomDataSnapshot?.clock.white : "No Timer"}
-            </p>
-          </div>
-        </div>
+        <WaitingForHost clock={`${roomDataSnapshot?.clock.white}`} />
       ) : null}
     </div>
   );
