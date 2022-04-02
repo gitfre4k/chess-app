@@ -22,7 +22,6 @@ interface IChessboardProps {
   blackPlayer?: { [key: string]: string };
   roomDataSnapshot: DocumentData | undefined;
   user: User | null | undefined;
-  updateClock: (player: "white" | "black", timeLeft: string) => void;
   roomDocRef: DocumentReference;
 }
 
@@ -32,7 +31,6 @@ const Chessboard: React.FC<IChessboardProps> = ({
   blackPlayer,
   roomDataSnapshot,
   user,
-  updateClock,
   roomDocRef,
 }) => {
   const [rotateBoard, setRotateBoard] = useState(false);
@@ -161,7 +159,6 @@ const Chessboard: React.FC<IChessboardProps> = ({
         player={"white"}
         user={user?.uid === roomDataSnapshot?.white}
         roomDataSnapshot={roomDataSnapshot}
-        updateClock={updateClock}
       />
       ,
     </div>
@@ -175,7 +172,6 @@ const Chessboard: React.FC<IChessboardProps> = ({
         player={"black"}
         user={user?.uid === roomDataSnapshot?.black}
         roomDataSnapshot={roomDataSnapshot}
-        updateClock={updateClock}
       />
       ,
     </div>
