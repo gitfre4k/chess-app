@@ -2,7 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
   height: 100vh;
   position: relative;
+  overflow-y: hidden;
+}
+
+.content {
+  position: absolute;
+  display: flex;
+  gap: 1.5rem;
 }

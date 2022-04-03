@@ -13,10 +13,10 @@
   text-align: center;
   align-items: center;
   transition: 0.7s;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.507);
   &:hover {
     cursor: pointer;
-    background-color: rgb(2, 2, 2);
+    background-color: rgba(2, 2, 2, 0.709);
     box-shadow: 0px 10px 20px 0px rgba(106, 106, 106, 0.3);
     transition: 0.3s;
   }

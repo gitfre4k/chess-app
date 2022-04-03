@@ -12,7 +12,6 @@ const Navbar = () => {
       <h2 className={styles.logo}>Chess App</h2>
       {user ? (
         <div className={styles.userInfo}>
-          <p>{user?.displayName}</p>
           <button onClick={() => auth.signOut()}>SignOut</button>
         </div>
       ) : null}

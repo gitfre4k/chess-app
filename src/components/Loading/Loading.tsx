@@ -12,7 +12,7 @@ const Loading = () => {
         <title>Loading...</title>
       </Head>
       <div className={styles.container}>
-        <Image src={loadingImage} alt="blured image of chessboard" />
+        <Image src={loadingImage} alt="chessboard" />
         <div className={styles.indicator}>
           <LoadingIndicator />
         </div>

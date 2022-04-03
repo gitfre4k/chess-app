@@ -3,11 +3,15 @@
   justify-content: center;
   box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
   border-radius: 50px;
+  background-color: rgba(2, 2, 2, 0.709);
+  padding: 1rem;
 }
 
 .wrrraper {
   display: flex;
   flex-direction: column;
   position: relative;
+  justify-content: center;
+  height: 92vh;
   align-items: center;
 }

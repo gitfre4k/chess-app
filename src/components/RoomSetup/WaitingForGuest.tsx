@@ -7,16 +7,31 @@ interface IWaitingForGuestProps {
 }
 
 const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
+  const href = window.location.href;
   return (
-    <div className={styles.waiting}>
-      <p>Share this room ID with a friend.</p>
-      <input value={roomID} readOnly />
-      <div onClick={() => navigator.clipboard.writeText(roomID)} className={styles.copyBtn}>
-        Copy
+    <>
+      <div className={styles.waiting}>
+        <p>Share link or room ID to invite a friend.</p>
+        <div className={styles.inline}>
+          <p>Link</p>
+          <input value={href} readOnly />
+          <div onClick={() => navigator.clipboard.writeText(href)} className={styles.copyBtn}>
+            Copy
+          </div>
+        </div>
+        <div className={styles.inline}>
+          <p>Room ID</p>
+          <input value={roomID} readOnly />
+          <div onClick={() => navigator.clipboard.writeText(roomID)} className={styles.copyBtn}>
+            Copy
+          </div>
+        </div>
       </div>
-      <LoadingIndicator pulse={true} />
-      <p>W8ing 4 some1 to join...</p>
-    </div>
+      <div className={styles.loading}>
+        <LoadingIndicator pulse={true} />
+        <p>W8ing 4 some1 to join...</p>
+      </div>
+    </>
   );
 };
 
