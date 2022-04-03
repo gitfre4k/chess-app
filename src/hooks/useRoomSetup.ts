@@ -12,6 +12,10 @@ const useRoomSetup = () => {
   const [time, setTime] = useState(0);
   const timeIndex = useMemo(() => ["", "1:00", "3:00", "5:00"], []);
 
+  const goBack = () => {
+    router.push(`/`);
+  };
+
   const startGame = () => {
     updateDoc(roomDocRef, {
       start: true,
@@ -53,7 +57,7 @@ const useRoomSetup = () => {
       });
   };
 
-  return { time, startGame, changeColor, changeTime };
+  return { time, goBack, startGame, changeColor, changeTime };
 };
 
 export default useRoomSetup;

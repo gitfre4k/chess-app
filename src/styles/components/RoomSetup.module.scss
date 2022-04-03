@@ -1,7 +1,7 @@
 .wraper {
   display: flex;
   justify-content: center;
-  box-shadow: 0px 1px 0px 0px rgba(106, 106, 106, 0.3);
+  box-shadow: -1px -1px 0px 0px rgba(106, 106, 106, 0.3);
   border-radius: 50px;
   background-color: rgba(2, 2, 2, 0.709);
   padding: 1rem;
@@ -14,4 +14,17 @@
   justify-content: center;
   height: 92vh;
   align-items: center;
+}
+
+.back {
+  position: absolute;
+  height: 7vh;
+  width: 7vw;
+  left: 17vw;
+  transition: 0.7s;
+  &:hover {
+    cursor: pointer;
+    transition: 0.3s;
+    left: 16.5vw;
+  }
 }
