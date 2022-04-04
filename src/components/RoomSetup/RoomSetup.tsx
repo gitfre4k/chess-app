@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import useRoomSetup from "../../hooks/useRoomSetup";
 
 import { db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 import User from "./User";
 import WaitingForGuest from "./WaitingForGuest";
 import WaitingForHost from "./WaitingForHost";
@@ -40,6 +48,28 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomDataSnapshot }
     };
     updateRoomInfo();
   }, [roomDataSnapshot?.host, roomDataSnapshot?.guest, roomDataSnapshot?.white]);
+
+  useEffect(() => {
+    if (
+      user &&
+      roomDataSnapshot?.host &&
+      !roomDataSnapshot?.guest &&
+      user?.uid !== roomDataSnapshot?.host
+    ) {
+      const docRef = doc(db, "rooms", roomID);
+      updateDoc(docRef, {
+        users: arrayUnion(user?.email),
+        guest: user?.uid,
+        black: user?.uid,
+      });
+      addDoc(collection(db, "messages"), {
+        timestamp: serverTimestamp(),
+        user: "SERVER",
+        roomID: roomID,
+        msg: user?.displayName + " has joined the room.",
+      });
+    }
+  }, [roomDataSnapshot?.guest, roomDataSnapshot?.host, user, roomID]);
 
   return (
     <>
