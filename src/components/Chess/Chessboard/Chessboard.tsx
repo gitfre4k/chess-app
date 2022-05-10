@@ -1,41 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as hooks from "./hooks";
 
 import Square from "../Square";
-import UserInfo from "../../UserInfo/UserInfo";
-import Clock from "../../Clock/Clock";
 import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
 import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
 import { IFigure, IDestination } from "./interfaces";
-import { DocumentData } from "firebase/firestore";
-import { User } from "firebase/auth";
 
 import styles from "../../../styles/components/Chessboard.module.scss";
-import { DocumentReference } from "firebase/firestore";
 
 interface IChessboardProps {
-  updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
-  whitePlayer?: { [key: string]: string };
-  blackPlayer?: { [key: string]: string };
-  roomDataSnapshot: DocumentData | undefined;
-  user: User | null | undefined;
-  roomDocRef: DocumentReference;
+  rotateBoard: boolean;
 }
 
-const Chessboard: React.FC<IChessboardProps> = ({
-  updateNotationBoard,
-  whitePlayer,
-  blackPlayer,
-  roomDataSnapshot,
-  user,
-  roomDocRef,
-}) => {
-  const [rotateBoard, setRotateBoard] = useState(false);
-
-  const { activePlayer, changePlayer } = hooks.useTurnSwitch(roomDataSnapshot, roomDocRef);
+const Chessboard: React.FC<IChessboardProps> = ({ rotateBoard }) => {
+  const { activePlayer, changePlayer } = hooks.useTurnSwitch();
   const { positions, updatePositions, upgradePawn } = hooks.usePositions();
   const { selectedFigure, validMoves, selectFigure, deselectFigure } = hooks.useFigure();
   const { enPassantMoves, checkForEnPassant, preventEnPassant } = hooks.useEnPassant();
@@ -43,10 +24,6 @@ const Chessboard: React.FC<IChessboardProps> = ({
   const { pawnPromotion, promotePawn, endPawnPromotion } = hooks.usePawnPromotion();
   const { check, mate, updateCheckStatus, checkForMate } = hooks.useCheckMate();
   const positionsRef = useRef(positions);
-
-  useEffect(() => {
-    setRotateBoard(user?.uid !== roomDataSnapshot?.white);
-  }, [roomDataSnapshot?.white, user?.uid]);
 
   useEffect(() => {
     positionsRef.current = positions;
@@ -63,7 +40,6 @@ const Chessboard: React.FC<IChessboardProps> = ({
   }, [mate, check, activePlayer]);
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
-    if (roomDataSnapshot?.[activePlayer] !== user?.uid) return;
     if (mate || pawnPromotion) return;
     if (!selectedFigure && figure && activePlayer === figure.color) {
       selectFigure(figure, positions, enPassantMoves, castling);
@@ -81,10 +57,7 @@ const Chessboard: React.FC<IChessboardProps> = ({
         isKingSafe(moveInfo2, positions)
       ) {
         updatePositions(moveInfo, activePlayer, enPassantMoves);
-
-        updateNotationBoard(selectedFigure, x, y, !!positions[`${x}${y}`]);
         updateCastlingStatus(moveInfo);
-
         if (selectedFigure.name === "pawn" && (y === 8 || y === 1)) {
           figure && selectFigure(figure, positions, enPassantMoves, castling, true);
           promotePawn(`${x}${y}`);
@@ -151,51 +124,12 @@ const Chessboard: React.FC<IChessboardProps> = ({
     return promotions;
   };
 
-  const whitePlayerInfo = (
-    <div>
-      <UserInfo user={whitePlayer} />,
-      <Clock
-        start={activePlayer === "white"}
-        player={"white"}
-        user={user?.uid === roomDataSnapshot?.white}
-        roomDataSnapshot={roomDataSnapshot}
-      />
-      ,
-    </div>
-  );
-
-  const blackPlayerInfo = (
-    <div>
-      <UserInfo user={blackPlayer} />,
-      <Clock
-        start={activePlayer === "black"}
-        player={"black"}
-        user={user?.uid === roomDataSnapshot?.black}
-        roomDataSnapshot={roomDataSnapshot}
-      />
-      ,
-    </div>
-  );
-
   return (
     <>
       <div className={styles.container}>
         {pawnPromotion ? <div className={styles.promotions}>{renderPawnPromotions()}</div> : null}
         <div className={styles.chessboard}>
           {!rotateBoard ? renderChessboard() : renderChessboard().reverse()}
-        </div>
-        <div className={styles.usersInfo}>
-          {roomDataSnapshot && !rotateBoard ? (
-            <>
-              {blackPlayerInfo}
-              {whitePlayerInfo}
-            </>
-          ) : (
-            <>
-              {whitePlayerInfo}
-              {blackPlayerInfo}
-            </>
-          )}
         </div>
       </div>
     </>

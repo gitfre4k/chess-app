@@ -1,9 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
+import { useState, useCallback } from "react";
 
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../../firebase";
 import { getFigureName, getFigureColor, getAxis } from "../helpers/figure-info";
 
 import { IEnPassantMoves, IPositions } from "../interfaces";
@@ -13,20 +9,6 @@ const useEnPassant = () => {
     white: [],
     black: [],
   });
-  const router = useRouter();
-  const roomDoc = doc(db, "rooms", `${router.query.id}`);
-  const [roomSnapshot] = useDocumentData(roomDoc);
-  const enPassantMovesRef = useRef(enPassantMoves);
-  const roomDocRef = useRef(roomDoc);
-
-  useEffect(() => {
-    if (roomSnapshot)
-      setEnPassantMoves((prevValue) => {
-        const newValue = JSON.parse(roomSnapshot.enPassant);
-        enPassantMovesRef.current = { ...prevValue, ...newValue };
-        return { ...prevValue, ...newValue };
-      });
-  }, [roomSnapshot]);
 
   const checkForEnPassant = (moveInfo: string[], positions: IPositions) => {
     if (getFigureName(positions[moveInfo[0]]) === "pawn") {
@@ -55,15 +37,17 @@ const useEnPassant = () => {
 
         const newValue = { ...enPassantMoves };
         i > 0 ? (newValue.black = enPassantValue) : (newValue.white = enPassantValue);
-        updateDoc(roomDoc, { enPassant: JSON.stringify(newValue) });
+        setEnPassantMoves(newValue);
       }
     }
   };
 
   const preventEnPassant = useCallback((activePlayer: "white" | "black") => {
-    const newValue = { ...enPassantMovesRef.current };
-    activePlayer === "white" ? (newValue.black = []) : (newValue.white = []);
-    updateDoc(roomDocRef.current, { enPassant: JSON.stringify(newValue) });
+    setEnPassantMoves((preValue) => {
+      const newValue = { ...preValue };
+      activePlayer === "white" ? (newValue.black = []) : (newValue.white = []);
+      return newValue;
+    });
   }, []);
 
   return { enPassantMoves, checkForEnPassant, preventEnPassant };

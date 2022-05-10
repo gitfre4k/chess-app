@@ -1,0 +1,32 @@
+@import "../abstracts/mixins";
+
+.hero {
+  display: flex;
+  margin-left: 2rem;
+
+  span {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 1em 0.5em;
+  }
+
+  &Logo {
+    flex-shrink: 0;
+    position: relative;
+    height: 6rem;
+    width: 8rem;
+  }
+
+  @include respond(tab-lend) {
+    margin-top: 10rem;
+
+    span {
+      font-size: 5.5rem;
+    }
+
+    &Logo {
+      height: 18rem;
+      width: 24rem;
+    }
+  }
+}

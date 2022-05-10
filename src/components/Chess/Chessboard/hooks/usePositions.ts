@@ -1,25 +1,11 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../../firebase";
 import { startingPositions, emptyBoard } from "../../../../constants/positions";
 
 import { IFigure, IEnPassantMoves, IDestination } from "../interfaces";
 
 const usePositions = () => {
   const [positions, setPositions] = useState(startingPositions);
-  const router = useRouter();
-  const roomDocRef = doc(db, "rooms", `${router.query.id}`);
-  const [roomSnapshot] = useDocumentData(roomDocRef);
-
-  useEffect(() => {
-    if (roomSnapshot) {
-      const newPositions = JSON.parse(roomSnapshot.positions);
-      setPositions({ ...emptyBoard, ...newPositions });
-    }
-  }, [roomSnapshot]);
 
   const updatePositions = (
     moveInfo: [IFigure, IDestination],
@@ -47,18 +33,12 @@ const usePositions = () => {
     newPositions[figure.xy] = undefined;
 
     setPositions(newPositions);
-    updateDoc(roomDocRef, {
-      positions: JSON.stringify(newPositions),
-    });
   };
 
   const upgradePawn = (pawn: string, figure: string) => {
     const newPositions = { ...positions };
     newPositions[pawn] = figure;
-
-    updateDoc(roomDocRef, {
-      positions: JSON.stringify(newPositions),
-    });
+    setPositions(newPositions);
   };
 
   return { positions, updatePositions, upgradePawn };

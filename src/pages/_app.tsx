@@ -3,11 +3,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase";
 import { collection, doc, setDoc } from "firebase/firestore";
 
-import Navbar from "../components/Navbar/Navbar";
+import Header from "../components/Header/Header";
 import Loading from "../components/Loading/Loading";
-import Login from "./login";
 
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -34,8 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   if (loading) return <Loading />;
   return (
     <>
-      <Navbar />
-      {user ? <Component {...pageProps} /> : <Login />}
+      <Header />
+      <Component {...pageProps} />
     </>
   );
 }

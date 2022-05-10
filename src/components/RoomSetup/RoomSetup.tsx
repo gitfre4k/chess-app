@@ -15,8 +15,6 @@ import User from "./User";
 import WaitingForGuest from "./WaitingForGuest";
 import WaitingForHost from "./WaitingForHost";
 import HostScreen from "./HostScreen";
-import Image from "next/image";
-import back from "../../assets/images/back.png";
 
 import styles from "../../styles/components/RoomSetup.module.scss";
 import { User as IUser } from "firebase/auth";
@@ -73,22 +71,19 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomDataSnapshot }
 
   return (
     <>
-      <div className={styles.wrrraper}>
-        <div className={styles.wraper}>
-          <User user={host} toggleColor={toggleColor} rotate={true} />
-          {roomDataSnapshot?.guest ? (
-            <User user={guest} toggleColor={!toggleColor} />
-          ) : (
-            <WaitingForGuest roomID={roomID} />
-          )}
+      <div className={styles.roomSetup}>
+        <div className={styles.roomSetupUsers}>
+          <fieldset>
+            <legend>Players (1/2)</legend>
+            <User user={host} toggleColor={toggleColor} rotate={true} />
+            {roomDataSnapshot?.guest ? <User user={guest} toggleColor={!toggleColor} /> : null}
+          </fieldset>
+          {roomDataSnapshot?.guest ? null : <WaitingForGuest roomID={roomID} />}
         </div>
         {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? <HostScreen /> : null}
         {roomDataSnapshot?.guest === user?.uid ? (
           <WaitingForHost clock={`${roomDataSnapshot?.clock.white}`} />
         ) : null}
-      </div>
-      <div className={styles.back} onClick={goBack}>
-        <Image src={back} alt="back icon" />
       </div>
     </>
   );

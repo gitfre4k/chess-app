@@ -18,7 +18,6 @@ interface IUserProps {
 const User: React.FC<IUserProps> = ({ user, toggleColor, rotate }) => {
   return (
     <div className={styles.container}>
-      <UserInfo user={user} />
       <div className={styles.img + " " + (rotate ? styles.rotate : "")}>
         <Image
           src={toggleColor ? bKnight : wKnight}
@@ -27,6 +26,7 @@ const User: React.FC<IUserProps> = ({ user, toggleColor, rotate }) => {
           layout="fill"
         />
       </div>
+      <UserInfo user={user} />
     </div>
   );
 };

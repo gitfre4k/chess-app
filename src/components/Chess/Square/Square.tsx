@@ -26,11 +26,17 @@ const Square: React.FC<ISquareProps> = ({
       }
       onClick={() => onClick(x, y, figure)}
     >
-      {piece && <Image src={piece} alt="Chess figure" width="70px" height="70px" />}
+      {piece && <Image src={piece} alt="Chess figure" width={90} height={90} />}
       {y === (rotated ? 8 : 1) ? (
-        <p className={styles.notationX}>{one2a(x).toUpperCase()}</p>
+        <div className={styles.notationX}>
+          <p>{one2a(x).toUpperCase()}</p>
+        </div>
       ) : null}
-      {x === (rotated ? 8 : 1) ? <p className={styles.notationY}>{y}</p> : null}
+      {x === (rotated ? 8 : 1) ? (
+        <div className={styles.notationY}>
+          <p>{y}</p>
+        </div>
+      ) : null}
     </div>
   );
 };

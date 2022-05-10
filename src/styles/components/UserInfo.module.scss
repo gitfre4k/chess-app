@@ -1,17 +1,5 @@
 .userInfo {
   display: flex;
-  height: 12vh;
   align-items: center;
-  width: 20vw;
   gap: 1rem;
-  box-shadow: -1px -1px 0px 0px rgba(106, 106, 106, 0.3);
-  border-radius: 50px;
-  padding-left: 1.5rem;
-  background-color: rgba(2, 2, 2, 0.709);
-  p {
-    margin-left: 1rem;
-    margin-top: auto;
-    margin-bottom: auto;
-    width: min-content;
-  }
 }

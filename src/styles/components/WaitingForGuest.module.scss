@@ -1,25 +1,26 @@
 .waiting {
-  display: flex;
-  flex-direction: column;
+  margin: 0 auto;
   text-align: center;
-  align-items: center;
-  color: white;
-  width: 20vw;
-  margin-top: auto;
-  margin-bottom: auto;
-}
+  padding: 1rem;
 
-.copyBtn {
-  border-radius: 50px;
-  box-shadow: -1px -1px 0px 0px rgba(106, 106, 106, 0.3);
-  padding: 0.5rem;
-  padding-bottom: 0.6rem;
-  transition: 0.7s;
-  &:hover {
-    border: 2px;
-    cursor: pointer;
-    box-shadow: 0px 5px 20px 0px rgba(106, 106, 106, 0.3);
-    transition: 0.3s;
+  &Title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  &CopyLines {
+    display: flex;
+    align-items: center;
+    p {
+      width: 8rem;
+      text-align: center;
+    }
+    input {
+      height: 3.5rem;
+    }
+    button {
+      margin: 0.2rem 0.5rem;
+    }
   }
 }
 
@@ -27,29 +28,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: 5vh;
-}
-
-.inline {
-  display: flex;
-  margin-left: auto;
-  height: 6vh;
-  align-items: center;
-  gap: 0.5rem;
-  flex-grow: 1;
-  flex-shrink: 0;
-  input {
-    width: 9vw;
-  }
 }
 
 .success {
-  transition: opacity 1000ms;
+  transition: opacity 400ms;
   opacity: 1;
 }
 
 .img {
-  transition: opacity 400ms;
+  transition: opacity 1000ms;
   opacity: 0;
 }

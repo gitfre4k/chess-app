@@ -9,13 +9,13 @@ interface IWaitingForHostProps {
 
 const WaitingForHost: React.FC<IWaitingForHostProps> = ({ clock }) => {
   return (
-    <div className={styles.loading}>
-      <p>Waiting for host to start a game...</p>
-      <LoadingIndicator pulse={true} />
-      <div className={styles.settings}>
+    <div className={styles.waiting}>
+      <div className={styles.waitingClock}>
         <TimerIcon />
         <p>{clock ? clock : "No Timer"}</p>
       </div>
+      <p>Waiting for host to start a game...</p>
+      <LoadingIndicator pulse={true} />
     </div>
   );
 };

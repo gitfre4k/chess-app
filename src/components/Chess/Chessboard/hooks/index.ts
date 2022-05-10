@@ -5,6 +5,7 @@ import useEnPassant from "./useEnPassant";
 import useCastling from "./useCastling";
 import usePawnPromotion from "./usePawnPromotion";
 import useCheckMate from "./useCheckMate";
+import useChessboard from "./useChessboard";
 
 export {
   useTurnSwitch,
@@ -14,4 +15,5 @@ export {
   useCastling,
   usePawnPromotion,
   useCheckMate,
+  useChessboard,
 };

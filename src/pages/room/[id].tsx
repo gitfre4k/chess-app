@@ -10,11 +10,10 @@ import useNotationBoard from "../../hooks/useNotationBoard";
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
 import Chess from "../../components/Chess";
 import Chat from "../../components/Chat/Chat";
-import Image from "next/image";
 import room from "../../assets/images/room.jpg";
 import NotationBoard from "../../components/NotationBoard/NotationBoard";
 
-import styles from "../../styles/pages/room.module.scss";
+import styles from "../../styles/pages/Room.module.scss";
 
 const Room = () => {
   const [start, setStart] = useState(false);
@@ -69,25 +68,23 @@ const Room = () => {
   }, [user, router.query.id]);
 
   return (
-    <div className={styles.container}>
-      <Image src={room} alt="room background" layout="fill" objectFit="cover" />
-      <Chat />
-      {start ? (
-        <>
-          <NotationBoard figures={notation} />
-          <Chess
-            updateNotationBoard={updateNotationBoard}
-            whitePlayer={whitePlayer}
-            blackPlayer={blackPlayer}
-            roomDataSnapshot={roomDataSnapshot}
+    <>
+      <div className={styles.container}>
+        {/* <Chat /> */}
+        {start ? (
+          <>
+            <NotationBoard figures={notation} />
+            <Chess rotateBoard={false} />
+          </>
+        ) : (
+          <RoomSetup
+            roomID={`${router.query.id}`}
             user={user}
-            roomDocRef={roomDocRef}
+            roomDataSnapshot={roomDataSnapshot}
           />
-        </>
-      ) : (
-        <RoomSetup roomID={`${router.query.id}`} user={user} roomDataSnapshot={roomDataSnapshot} />
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Button from "../Button/Button";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import Image from "next/image";
 import success from "../../assets/images/success.png";
@@ -30,13 +31,11 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
   return (
     <>
       <div className={styles.waiting}>
-        <p>Share link or room ID to invite a friend.</p>
-        <div className={styles.inline}>
+        <p className={styles.waitingTitle}>Share link or room ID to invite a friend.</p>
+        <div className={styles.waitingCopyLines}>
           <p>Link</p>
           <input value={href} readOnly />
-          <div onClick={() => onCopy(true)} className={styles.copyBtn}>
-            Copy
-          </div>
+          <Button name="Copy" action={() => onCopy(true)} style="dark" />
           <Image
             src={success}
             alt="success icon"
@@ -45,12 +44,10 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
             className={copyLink ? styles.success : styles.img}
           />
         </div>
-        <div className={styles.inline}>
+        <div className={styles.waitingCopyLines}>
           <p>Room ID</p>
           <input value={roomID} readOnly />
-          <div onClick={() => onCopy()} className={styles.copyBtn}>
-            Copy
-          </div>
+          <Button name="Copy" action={() => onCopy()} style="dark" />
           <Image
             src={success}
             alt="success icon"
@@ -62,7 +59,7 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
       </div>
       <div className={styles.loading}>
         <LoadingIndicator pulse={true} />
-        <p>W8ing 4 some1 to join...</p>
+        <p>Waiting for someone to join...</p>
       </div>
     </>
   );
