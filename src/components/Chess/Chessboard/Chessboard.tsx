@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import * as hooks from "./hooks";
+import { useEffect, useReducer } from "react";
+import { reducer, initialState } from "./hooks/chessReducer";
 
 import Square from "../Square";
 import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
@@ -11,29 +11,26 @@ import { IFigure, IDestination } from "./interfaces";
 
 import styles from "../../../styles/components/Chessboard.module.scss";
 
-interface IChessboardProps {
-  rotateBoard: boolean;
-}
-
-const Chessboard: React.FC<IChessboardProps> = ({ rotateBoard }) => {
-  const { activePlayer, changePlayer } = hooks.useTurnSwitch();
-  const { positions, updatePositions, upgradePawn } = hooks.usePositions();
-  const { selectedFigure, validMoves, selectFigure, deselectFigure } = hooks.useFigure();
-  const { enPassantMoves, checkForEnPassant, preventEnPassant } = hooks.useEnPassant();
-  const { castling, updateCastlingStatus } = hooks.useCastling();
-  const { pawnPromotion, promotePawn, endPawnPromotion } = hooks.usePawnPromotion();
-  const { check, mate, updateCheckStatus, checkForMate } = hooks.useCheckMate();
-  const positionsRef = useRef(positions);
-
-  useEffect(() => {
-    positionsRef.current = positions;
-  }, [positions]);
+const Chessboard: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    activePlayer,
+    positions,
+    selectedFigure,
+    validMoves,
+    enPassantMoves,
+    castling,
+    pawnPromotion,
+    check,
+    mate,
+    rotateBoard,
+  } = state;
 
   useEffect(() => {
-    preventEnPassant(activePlayer);
-    updateCheckStatus(activePlayer, positionsRef.current);
-    checkForMate(activePlayer, positionsRef.current);
-  }, [activePlayer, pawnPromotion, updateCheckStatus, checkForMate, preventEnPassant]);
+    dispatch({ type: "PREVENT_EN_PASSANT" });
+    dispatch({ type: "UPDATE_CHECK_STATUS" });
+    dispatch({ type: "CHECK_FOR_MATE" });
+  }, [activePlayer, pawnPromotion]);
 
   useEffect(() => {
     mate && (check[activePlayer] ? alert("checkmate") : alert("stalemate"));
@@ -42,12 +39,15 @@ const Chessboard: React.FC<IChessboardProps> = ({ rotateBoard }) => {
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
     if (mate || pawnPromotion) return;
     if (!selectedFigure && figure && activePlayer === figure.color) {
-      selectFigure(figure, positions, enPassantMoves, castling);
+      dispatch({
+        type: "SELECT_FIGURE",
+        payload: { figure, promotion: false },
+      });
       return;
     }
     if (selectedFigure) {
       if (activePlayer === figure?.color) {
-        deselectFigure();
+        dispatch({ type: "DESELECT_FIGURE" });
         return;
       }
       const moveInfo: [IFigure, IDestination] = [selectedFigure, { x, y, xy: `${x}${y}` }];
@@ -56,25 +56,29 @@ const Chessboard: React.FC<IChessboardProps> = ({ rotateBoard }) => {
         isMoveValid(moveInfo, positions, enPassantMoves, castling) &&
         isKingSafe(moveInfo2, positions)
       ) {
-        updatePositions(moveInfo, activePlayer, enPassantMoves);
-        updateCastlingStatus(moveInfo);
+        dispatch({ type: "UPDATE_POSITIONS", payload: { moveInfo } });
+        dispatch({ type: "UPDATE_CASTLING_STATUS", payload: { moveInfo } });
         if (selectedFigure.name === "pawn" && (y === 8 || y === 1)) {
-          figure && selectFigure(figure, positions, enPassantMoves, castling, true);
-          promotePawn(`${x}${y}`);
+          figure &&
+            dispatch({
+              type: "SELECT_FIGURE",
+              payload: { figure, promotion: true },
+            });
+          dispatch({ type: "PROMOTE_PAWN", payload: `${x}${y}` });
           return;
         }
-        checkForEnPassant(moveInfo2, positions);
-        changePlayer();
+        dispatch({ type: "CHECK_FOR_EN_PASSANT", payload: moveInfo2 });
+        dispatch({ type: "CHANGE_PLAYER", payload: activePlayer === "white" ? "black" : "white" });
       }
-      deselectFigure();
+      dispatch({ type: "DESELECT_FIGURE" });
     }
   };
 
   const promotionClickHandler = (x: number, y: number, figure?: IFigure) => {
-    figure && upgradePawn(pawnPromotion, figure.piece);
-    deselectFigure();
-    endPawnPromotion();
-    changePlayer();
+    figure && dispatch({ type: "UPGRADE_PAWN", payload: { figure: figure.piece } });
+    dispatch({ type: "DESELECT_FIGURE" });
+    dispatch({ type: "END_PAWN_PROMOTION" });
+    dispatch({ type: "CHANGE_PLAYER", payload: activePlayer === "white" ? "black" : "white" });
   };
 
   const renderChessboard = () => {

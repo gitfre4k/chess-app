@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -74,7 +74,7 @@ const Room = () => {
         {start ? (
           <>
             <NotationBoard figures={notation} />
-            <Chess rotateBoard={false} />
+            <Chess />
           </>
         ) : (
           <RoomSetup

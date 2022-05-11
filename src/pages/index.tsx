@@ -1,5 +1,4 @@
 import useRoom from "../hooks/useRoom";
-import { useChessboard } from "../components/Chess/Chessboard/hooks";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
@@ -17,7 +16,6 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   const [user] = useAuthState(auth);
   const { createRoom, joinRoom } = useRoom();
-  const { rotateBoard, rotateChessboard } = useChessboard();
 
   const onJoinRoom = () => {
     const roomID = prompt("Enter room ID");
@@ -43,10 +41,10 @@ const Home: NextPage = () => {
           <Login />
         )}
         <div className={styles.containerChess}>
-          <Chessboard rotateBoard={rotateBoard} />
+          <Chessboard />
           <div className={styles.containerChessBtn}>
-            <Button name="Rotate Board" style="dark" action={rotateChessboard} />
-            <Button name="Reset" style="dark" action={console.log("reset")} />
+            <Button name="Rotate Board" style="dark" action={() => console.log("rotate")} />
+            <Button name="Reset" style="dark" action={() => console.log("reset")} />
           </div>
         </div>
       </main>
