@@ -1,13 +1,27 @@
-.roomSetup {
-  margin: 10rem 1rem;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5rem 1rem;
 
-  &Users {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+  .roomSetup {
+    width: 100%;
+    max-width: 100rem;
+    margin: 2rem 1rem;
+    border: solid 2px white;
+    padding: 1rem;
 
-    legend {
-      font-size: 1.5rem;
+    &Users {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+
+      legend {
+        font-size: 1.5rem;
+      }
     }
+  }
+  .btn {
+    text-align: center;
   }
 }

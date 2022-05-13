@@ -1,4 +1,4 @@
-import { IFigure, IDestination, IPositions } from "../../interfaces";
+import { IFigure, IDestination, IPositions } from "../../../../../interfaces";
 
 const isPathFree = (moveInfo: [IFigure, IDestination], positions: IPositions) => {
   const [figure, destination] = moveInfo;

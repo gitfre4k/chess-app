@@ -1,4 +1,4 @@
-import { IFigure } from "../interfaces";
+import { IFigure } from "../../../../interfaces";
 
 const getFigureColor = (figure: string | undefined) => {
   if (!figure) return undefined;

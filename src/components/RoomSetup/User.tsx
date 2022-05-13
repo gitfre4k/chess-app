@@ -4,13 +4,10 @@ import wKnight from "../../assets/images/wKnight.png";
 import bKnight from "../../assets/images/bKnight.png";
 
 import styles from "../../styles/components/User.module.scss";
+import { DocumentData } from "firebase/firestore";
 
 interface IUserProps {
-  user:
-    | {
-        [key: string]: string;
-      }
-    | undefined;
+  user: DocumentData | undefined;
   toggleColor: boolean;
   rotate?: boolean;
 }
@@ -26,7 +23,7 @@ const User: React.FC<IUserProps> = ({ user, toggleColor, rotate }) => {
           layout="fill"
         />
       </div>
-      <UserInfo user={user} />
+      {user ? <UserInfo user={user} /> : null}
     </div>
   );
 };

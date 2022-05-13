@@ -1,18 +1,33 @@
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/router";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-const useRoomSetup = () => {
+import { User } from "firebase/auth";
+
+const useRoomSetup = (user: User, roomState: DocumentData) => {
   const router = useRouter();
   const roomDocRef = doc(db, "rooms", `${router.query.id}`);
-  const [roomDataSnapshot] = useDocumentData(roomDocRef);
   const [time, setTime] = useState(0);
   const timeIndex = useMemo(() => ["", "1:00", "3:00", "5:00"], []);
 
   const goBack = () => {
+    user.uid === roomState.host &&
+      updateDoc(roomDocRef, {
+        host: roomState.guest,
+        white: roomState.guest,
+        guest: "",
+        black: "",
+        clock: "",
+      });
+    user.uid === roomState.guest &&
+      updateDoc(roomDocRef, {
+        white: roomState.host,
+        guest: "",
+        black: "",
+        clock: "",
+      });
     router.push(`/`);
   };
 
@@ -23,9 +38,9 @@ const useRoomSetup = () => {
   };
 
   const changeColor = () => {
-    const black = roomDataSnapshot?.white;
+    const black = roomState.white;
     updateDoc(roomDocRef, {
-      white: roomDataSnapshot?.black,
+      white: roomState.black,
       black,
     });
   };
@@ -33,10 +48,7 @@ const useRoomSetup = () => {
   const setClock = useCallback(
     (time: string) => {
       updateDoc(roomDocRef, {
-        clock: {
-          white: time,
-          black: time,
-        },
+        clock: time,
       });
     },
     [roomDocRef]

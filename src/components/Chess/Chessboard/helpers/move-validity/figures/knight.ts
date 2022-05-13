@@ -1,4 +1,4 @@
-import { IFigure, IDestination } from "../../../interfaces";
+import { IFigure, IDestination } from "../../../../../../interfaces";
 
 const knightValidity = (moveInfo: [IFigure, IDestination]) => {
   const [figure, destination] = moveInfo;

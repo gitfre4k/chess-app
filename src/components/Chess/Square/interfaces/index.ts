@@ -1,4 +1,4 @@
-import { IFigure } from "../../Chessboard/interfaces";
+import { IFigure } from "../../../../interfaces";
 
 export interface ISquareProps {
   x: number;

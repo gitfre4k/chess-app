@@ -1,3 +1,5 @@
+import { useReducer } from "react";
+import { reducer, initialState } from "../reducer/chessReducer";
 import useRoom from "../hooks/useRoom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,6 +16,7 @@ import styles from "../styles/pages/Home.module.scss";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [user] = useAuthState(auth);
   const { createRoom, joinRoom } = useRoom();
 
@@ -41,10 +44,14 @@ const Home: NextPage = () => {
           <Login />
         )}
         <div className={styles.containerChess}>
-          <Chessboard />
+          <Chessboard state={state} dispatch={dispatch} />
           <div className={styles.containerChessBtn}>
-            <Button name="Rotate Board" style="dark" action={() => console.log("rotate")} />
-            <Button name="Reset" style="dark" action={() => console.log("reset")} />
+            <Button
+              name="Rotate Board"
+              style="dark"
+              action={() => dispatch({ type: "ROTATE_BOARD" })}
+            />
+            <Button name="Reset" style="dark" action={() => dispatch({ type: "RESET" })} />
           </div>
         </div>
       </main>

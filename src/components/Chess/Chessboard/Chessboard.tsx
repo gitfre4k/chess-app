@@ -1,5 +1,4 @@
-import { useEffect, useReducer } from "react";
-import { reducer, initialState } from "./hooks/chessReducer";
+import { useEffect } from "react";
 
 import Square from "../Square";
 import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
@@ -7,12 +6,17 @@ import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
-import { IFigure, IDestination } from "./interfaces";
+import { IFigure, IDestination, ChessState, ChessAction } from "../../../interfaces";
+import { Dispatch } from "react";
 
 import styles from "../../../styles/components/Chessboard.module.scss";
 
-const Chessboard: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+interface ChessboardProps {
+  state: ChessState;
+  dispatch: Dispatch<ChessAction>;
+}
+
+const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch }) => {
   const {
     activePlayer,
     positions,
@@ -30,7 +34,7 @@ const Chessboard: React.FC = () => {
     dispatch({ type: "PREVENT_EN_PASSANT" });
     dispatch({ type: "UPDATE_CHECK_STATUS" });
     dispatch({ type: "CHECK_FOR_MATE" });
-  }, [activePlayer, pawnPromotion]);
+  }, [activePlayer, pawnPromotion, dispatch]);
 
   useEffect(() => {
     mate && (check[activePlayer] ? alert("checkmate") : alert("stalemate"));

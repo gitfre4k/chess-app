@@ -4,9 +4,16 @@ import Button from "../Button/Button";
 import TimerIcon from "../TimerIcon";
 
 import styles from "../../styles/components/HostScreen.module.scss";
+import { User } from "firebase/auth";
+import { DocumentData } from "firebase/firestore";
 
-const HostScreen = () => {
-  const { time, changeTime, changeColor, startGame } = useRoomSetup();
+interface HostScreenProps {
+  user: User;
+  roomState: DocumentData;
+}
+
+const HostScreen: React.FC<HostScreenProps> = ({ user, roomState }) => {
+  const { time, changeTime, changeColor, startGame } = useRoomSetup(user, roomState);
 
   return (
     <div className={styles.hostOptions}>

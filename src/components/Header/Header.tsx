@@ -4,6 +4,7 @@ import { auth } from "../../firebase";
 
 import Button from "../Button/Button";
 import Image from "next/image";
+
 import styles from "../../styles/components/Header.module.scss";
 
 const Header = () => {

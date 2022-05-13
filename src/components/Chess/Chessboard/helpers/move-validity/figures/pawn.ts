@@ -1,4 +1,4 @@
-import { IFigure, IDestination, IPositions, IEnPassantMoves } from "../../../interfaces";
+import { IFigure, IDestination, IPositions, IEnPassantMoves } from "../../../../../../interfaces";
 
 const pawnValidity = (
   moveInfo: [IFigure, IDestination],

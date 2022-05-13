@@ -1,97 +1,24 @@
-import { startingPositions } from "../../../../constants/positions";
-import { getNewPositions, upgradePawn } from "./positions";
-import { getValidMoves } from "./figure";
-import { preventEnPassant, checkForEnPassant } from "./enPassant";
-import { updateCastlingStatus } from "./castling";
-import { updateCheckStatus, checkForMate } from "./useCheckMate";
+import { startingPositions } from "../constants/positions";
 
-import { IFigure, IEnPassantMoves, IDestination } from "../interfaces";
+import {
+  getNewPositions,
+  upgradePawn,
+  updateCastlingStatus,
+  getValidMoves,
+  preventEnPassant,
+  checkForEnPassant,
+  updateCheckStatus,
+  checkForMate,
+} from "./actions";
 
-type ChessState = {
-  activePlayer: "white" | "black";
-  positions: {
-    [key: string]: string | undefined;
-  };
-  selectedFigure: IFigure | undefined;
-  validMoves: string[];
-  enPassantMoves: IEnPassantMoves;
-  castling: {
-    white: {
-      short: boolean;
-      long: boolean;
-    };
-    black: {
-      short: boolean;
-      long: boolean;
-    };
-  };
-  pawnPromotion: string;
-  check: {
-    white: boolean;
-    black: boolean;
-  };
-  mate: boolean;
-  rotateBoard: boolean;
-};
-
-type TurnSwitchAction = { type: "CHANGE_PLAYER"; payload: "white" | "black" };
-type PositionsAction = {
-  type: "UPDATE_POSITIONS";
-  payload: { moveInfo: [IFigure, IDestination] };
-};
-type UpgradePawnAction = {
-  type: "UPGRADE_PAWN";
-  payload: { figure: string };
-};
-type SelectFigureAction = {
-  type: "SELECT_FIGURE";
-  payload: {
-    figure: IFigure;
-    promotion?: boolean;
-  };
-};
-type DeselectFigureAction = { type: "DESELECT_FIGURE" };
-type CheckForEnPassantAction = { type: "CHECK_FOR_EN_PASSANT"; payload: string[] };
-type PreventEnPassantAction = { type: "PREVENT_EN_PASSANT" };
-type UpdateCastlingStatusAction = {
-  type: "UPDATE_CASTLING_STATUS";
-  payload: { moveInfo: [IFigure, IDestination] };
-};
-type PromotePawnAction = {
-  type: "PROMOTE_PAWN";
-  payload: string;
-};
-type EndPawnPromotionAction = { type: "END_PAWN_PROMOTION" };
-type UpdateCheckStatusAction = { type: "UPDATE_CHECK_STATUS" };
-type CheckForMateAction = { type: "CHECK_FOR_MATE" };
-type RotateBoardAction = { type: "ROTATE_BOARD" };
-type ResetAction = { type: "RESET" };
-
-type ChessAction =
-  | TurnSwitchAction
-  | PositionsAction
-  | UpgradePawnAction
-  | SelectFigureAction
-  | DeselectFigureAction
-  | CheckForEnPassantAction
-  | PreventEnPassantAction
-  | UpdateCastlingStatusAction
-  | PromotePawnAction
-  | EndPawnPromotionAction
-  | UpdateCheckStatusAction
-  | CheckForMateAction
-  | RotateBoardAction
-  | ResetAction;
+import { ChessState, ChessAction } from "../interfaces";
 
 const initialState: ChessState = {
   activePlayer: "white",
   positions: startingPositions,
   selectedFigure: undefined,
   validMoves: [],
-  enPassantMoves: {
-    white: [],
-    black: [],
-  },
+  enPassantMoves: { white: [], black: [] },
   castling: {
     white: { short: true, long: true },
     black: { short: true, long: true },

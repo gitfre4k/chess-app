@@ -2,7 +2,8 @@
 
 .hero {
   display: flex;
-  margin-left: 2rem;
+  margin-left: 1rem;
+  user-select: none;
 
   span {
     font-size: 2rem;
