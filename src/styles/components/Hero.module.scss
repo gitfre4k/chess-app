@@ -2,7 +2,7 @@
 
 .hero {
   display: flex;
-  margin-left: 1rem;
+  position: absolute;
   user-select: none;
 
   span {
@@ -12,22 +12,21 @@
   }
 
   &Logo {
-    flex-shrink: 0;
     position: relative;
-    height: 6rem;
-    width: 8rem;
+    height: 3.7em;
+    width: 5em;
   }
 
-  @include respond(tab-lend) {
-    margin-top: 10rem;
+  // @include respond(tab-lend) {
+  //   margin-top: 10rem;
 
-    span {
-      font-size: 5.5rem;
-    }
+  //   span {
+  //     font-size: 5.5rem;
+  //   }
 
-    &Logo {
-      height: 18rem;
-      width: 24rem;
-    }
-  }
+  //   &Logo {
+  //     height: 18rem;
+  //     width: 24rem;
+  //   }
+  // }
 }

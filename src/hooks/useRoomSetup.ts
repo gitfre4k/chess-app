@@ -14,6 +14,7 @@ const useRoomSetup = (user: User, roomState: DocumentData) => {
 
   const goBack = () => {
     user.uid === roomState.host &&
+      roomState.guest &&
       updateDoc(roomDocRef, {
         host: roomState.guest,
         white: roomState.guest,

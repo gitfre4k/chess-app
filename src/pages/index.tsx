@@ -34,7 +34,6 @@ const Home: NextPage = () => {
       <main className={styles.container}>
         {user ? (
           <div className={styles.leftSide}>
-            <Hero />
             <div className={styles.leftSideCards}>
               <Card name="Create Room" action={createRoom} />
               <Card name="Join Room" action={onJoinRoom} />

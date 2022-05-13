@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   if (loading) return <Loading />;
   return (
     <>
-      <Header />
+      <Header user={user} />
       <Component {...pageProps} />
     </>
   );

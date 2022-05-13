@@ -4,16 +4,15 @@
 .header {
   display: flex;
   width: 100vw;
-  padding: 0.5rem;
 
   &RightSide {
     position: absolute;
-    right: 1rem;
-    top: 1rem;
+    right: 0.5em;
+    top: 0.5em;
     background-color: $color-green;
     width: fit-content;
-    padding: 1rem;
-    height: 6rem;
+    padding: 0.6em;
+    height: 3.7em;
 
     p {
       position: absolute;
