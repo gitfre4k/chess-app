@@ -1,0 +1,41 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
+.header {
+  display: flex;
+  width: 100vw;
+
+  &RightSide {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    background-color: $color-green;
+    width: fit-content;
+    padding: 0.6em;
+    height: 3.7em;
+
+    p {
+      position: absolute;
+      visibility: hidden;
+
+      @include respond(tab-lend) {
+        position: static;
+        visibility: visible;
+        margin: 0 auto;
+      }
+    }
+
+    &UserInfo {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+}
+
+.userPhoto {
+  flex-shrink: 0;
+  position: relative;
+  height: 4rem;
+  width: 4rem;
+}

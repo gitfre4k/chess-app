@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { updateDoc } from "firebase/firestore";
 import { one2a } from "../constants/square-notation";
 
-import { IFigure } from "../components/Chess/Chessboard/interfaces";
+import { IFigure } from "../interfaces";
 import { DocumentReference } from "firebase/firestore";
 
 const useNotationBoard = (notations: any, roomDocRef: DocumentReference) => {

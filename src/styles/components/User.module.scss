@@ -2,21 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  height: 40vh;
-  width: 20vw;
-  font-size: large;
-  color: white;
 }
 
 .img {
   position: relative;
-  height: 20vh;
-  width: 100%;
-  margin-top: auto;
-  margin-bottom: auto;
+  height: 6rem;
+  width: 6rem;
+  margin: 0 1rem;
 }
 
-.rotate {
-  transform: scaleX(-1);
-}
+// .rotate {
+//   transform: scaleX(-1);
+// }

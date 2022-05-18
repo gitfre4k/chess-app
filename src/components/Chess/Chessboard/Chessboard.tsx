@@ -1,77 +1,66 @@
-import { useEffect, useRef, useState } from "react";
-import * as hooks from "./hooks";
+import { useEffect } from "react";
 
 import Square from "../Square";
-import UserInfo from "../../UserInfo/UserInfo";
-import Clock from "../../Clock/Clock";
 import { xyNotation, algebraicNotation } from "../../../constants/square-notation";
 import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
-import { IFigure, IDestination } from "./interfaces";
-import { DocumentData } from "firebase/firestore";
-import { User } from "firebase/auth";
-
 import styles from "../../../styles/components/Chessboard.module.scss";
-import { DocumentReference } from "firebase/firestore";
+import { Dispatch } from "react";
+import { DocumentData } from "firebase/firestore";
+import { User as IUser } from "firebase/auth";
+import { IFigure, IDestination, ChessState, ChessAction } from "../../../interfaces";
 
-interface IChessboardProps {
-  updateNotationBoard: (figure: IFigure, x: number, y: number, captured: boolean) => void;
-  whitePlayer?: { [key: string]: string };
-  blackPlayer?: { [key: string]: string };
-  roomDataSnapshot: DocumentData | undefined;
-  user: User | null | undefined;
-  roomDocRef: DocumentReference;
+interface ChessboardProps {
+  state: ChessState;
+  dispatch: Dispatch<ChessAction>;
+  roomState?: DocumentData;
+  user?: IUser;
+  roomID?: string;
 }
 
-const Chessboard: React.FC<IChessboardProps> = ({
-  updateNotationBoard,
-  whitePlayer,
-  blackPlayer,
-  roomDataSnapshot,
-  user,
-  roomDocRef,
-}) => {
-  const [rotateBoard, setRotateBoard] = useState(false);
-
-  const { activePlayer, changePlayer } = hooks.useTurnSwitch(roomDataSnapshot, roomDocRef);
-  const { positions, updatePositions, upgradePawn } = hooks.usePositions();
-  const { selectedFigure, validMoves, selectFigure, deselectFigure } = hooks.useFigure();
-  const { enPassantMoves, checkForEnPassant, preventEnPassant } = hooks.useEnPassant();
-  const { castling, updateCastlingStatus } = hooks.useCastling();
-  const { pawnPromotion, promotePawn, endPawnPromotion } = hooks.usePawnPromotion();
-  const { check, mate, updateCheckStatus, checkForMate } = hooks.useCheckMate();
-  const positionsRef = useRef(positions);
+const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch, roomState, user, roomID }) => {
+  const {
+    activePlayer,
+    positions,
+    selectedFigure,
+    validMoves,
+    enPassantMoves,
+    castling,
+    pawnPromotion,
+    check,
+    mate,
+    rotateBoard,
+  } = state;
 
   useEffect(() => {
-    setRotateBoard(user?.uid !== roomDataSnapshot?.white);
-  }, [roomDataSnapshot?.white, user?.uid]);
-
-  useEffect(() => {
-    positionsRef.current = positions;
-  }, [positions]);
-
-  useEffect(() => {
-    preventEnPassant(activePlayer);
-    updateCheckStatus(activePlayer, positionsRef.current);
-    checkForMate(activePlayer, positionsRef.current);
-  }, [activePlayer, pawnPromotion, updateCheckStatus, checkForMate, preventEnPassant]);
+    dispatch({ type: "PREVENT_EN_PASSANT" });
+    dispatch({ type: "UPDATE_CHECK_STATUS" });
+    dispatch({ type: "CHECK_FOR_MATE" });
+  }, [activePlayer, pawnPromotion, dispatch]);
 
   useEffect(() => {
     mate && (check[activePlayer] ? alert("checkmate") : alert("stalemate"));
   }, [mate, check, activePlayer]);
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
-    if (roomDataSnapshot?.[activePlayer] !== user?.uid) return;
     if (mate || pawnPromotion) return;
-    if (!selectedFigure && figure && activePlayer === figure.color) {
-      selectFigure(figure, positions, enPassantMoves, castling);
+    if (
+      !selectedFigure &&
+      figure &&
+      activePlayer === figure.color &&
+      (roomState && user ? user.uid === roomState[activePlayer] : true)
+    ) {
+      dispatch({
+        type: "SELECT_FIGURE",
+        payload: { figure, promotion: false },
+      });
       return;
     }
     if (selectedFigure) {
       if (activePlayer === figure?.color) {
-        deselectFigure();
+        dispatch({ type: "DESELECT_FIGURE" });
         return;
       }
       const moveInfo: [IFigure, IDestination] = [selectedFigure, { x, y, xy: `${x}${y}` }];
@@ -80,28 +69,41 @@ const Chessboard: React.FC<IChessboardProps> = ({
         isMoveValid(moveInfo, positions, enPassantMoves, castling) &&
         isKingSafe(moveInfo2, positions)
       ) {
-        updatePositions(moveInfo, activePlayer, enPassantMoves);
-
-        updateNotationBoard(selectedFigure, x, y, !!positions[`${x}${y}`]);
-        updateCastlingStatus(moveInfo);
-
+        dispatch({ type: "UPDATE_POSITIONS", payload: { moveInfo, roomID } });
+        dispatch({ type: "UPDATE_CASTLING_STATUS", payload: { moveInfo } });
         if (selectedFigure.name === "pawn" && (y === 8 || y === 1)) {
-          figure && selectFigure(figure, positions, enPassantMoves, castling, true);
-          promotePawn(`${x}${y}`);
+          figure &&
+            dispatch({
+              type: "SELECT_FIGURE",
+              payload: { figure, promotion: true },
+            });
+          dispatch({ type: "PROMOTE_PAWN", payload: `${x}${y}` });
           return;
         }
-        checkForEnPassant(moveInfo2, positions);
-        changePlayer();
+        dispatch({ type: "CHECK_FOR_EN_PASSANT", payload: { value: moveInfo2, roomID } });
+        dispatch({
+          type: "CHANGE_PLAYER",
+          payload: {
+            value: activePlayer === "white" ? "black" : "white",
+            roomID,
+          },
+        });
       }
-      deselectFigure();
+      dispatch({ type: "DESELECT_FIGURE" });
     }
   };
 
   const promotionClickHandler = (x: number, y: number, figure?: IFigure) => {
-    figure && upgradePawn(pawnPromotion, figure.piece);
-    deselectFigure();
-    endPawnPromotion();
-    changePlayer();
+    figure && dispatch({ type: "UPGRADE_PAWN", payload: { figure: figure.piece, roomID } });
+    dispatch({ type: "DESELECT_FIGURE" });
+    dispatch({ type: "END_PAWN_PROMOTION" });
+    dispatch({
+      type: "CHANGE_PLAYER",
+      payload: {
+        value: activePlayer === "white" ? "black" : "white",
+        roomID,
+      },
+    });
   };
 
   const renderChessboard = () => {
@@ -151,51 +153,12 @@ const Chessboard: React.FC<IChessboardProps> = ({
     return promotions;
   };
 
-  const whitePlayerInfo = (
-    <div>
-      <UserInfo user={whitePlayer} />,
-      <Clock
-        start={activePlayer === "white"}
-        player={"white"}
-        user={user?.uid === roomDataSnapshot?.white}
-        roomDataSnapshot={roomDataSnapshot}
-      />
-      ,
-    </div>
-  );
-
-  const blackPlayerInfo = (
-    <div>
-      <UserInfo user={blackPlayer} />,
-      <Clock
-        start={activePlayer === "black"}
-        player={"black"}
-        user={user?.uid === roomDataSnapshot?.black}
-        roomDataSnapshot={roomDataSnapshot}
-      />
-      ,
-    </div>
-  );
-
   return (
     <>
       <div className={styles.container}>
         {pawnPromotion ? <div className={styles.promotions}>{renderPawnPromotions()}</div> : null}
         <div className={styles.chessboard}>
           {!rotateBoard ? renderChessboard() : renderChessboard().reverse()}
-        </div>
-        <div className={styles.usersInfo}>
-          {roomDataSnapshot && !rotateBoard ? (
-            <>
-              {blackPlayerInfo}
-              {whitePlayerInfo}
-            </>
-          ) : (
-            <>
-              {whitePlayerInfo}
-              {blackPlayerInfo}
-            </>
-          )}
         </div>
       </div>
     </>

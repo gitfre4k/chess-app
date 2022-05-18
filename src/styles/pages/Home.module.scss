@@ -1,14 +1,54 @@
+@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
 .container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   height: 100vh;
-  position: relative;
-  overflow-y: hidden;
+  padding-top: 5em;
+
+  @include respond(tab-lend) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 7rem;
+    padding: 0 3rem;
+  }
+
+  &Chess {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include respond(tab-lend) {
+      margin: 5rem auto 0 0;
+    }
+
+    &Btn {
+      button {
+        margin: 1rem 0.5rem;
+      }
+    }
+  }
 }
 
-.content {
-  position: absolute;
+.leftSide {
   display: flex;
-  gap: 1.5rem;
+  flex-direction: column;
+  @include respond(tab-lend) {
+    margin-left: auto;
+    align-items: center;
+  }
+
+  &Cards {
+    display: flex;
+    gap: 5rem;
+    justify-content: center;
+    margin: 2rem 0 0.5rem;
+
+    @include respond(tab-lend) {
+      margin: 8rem auto 6rem;
+    }
+  }
 }

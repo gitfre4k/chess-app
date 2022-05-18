@@ -6,7 +6,13 @@ import bishopValidity from "./figures/bishop";
 import queenValidity from "./figures/queen";
 import kingValidity from "./figures/king";
 
-import { IFigure, IDestination, IPositions, IEnPassantMoves, ICastling } from "../../interfaces";
+import {
+  IFigure,
+  IDestination,
+  IPositions,
+  IEnPassantMoves,
+  ICastling,
+} from "../../../../../interfaces";
 
 const isMoveValid = (
   moveInfo: [IFigure, IDestination],

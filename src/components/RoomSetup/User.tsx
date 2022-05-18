@@ -4,13 +4,10 @@ import wKnight from "../../assets/images/wKnight.png";
 import bKnight from "../../assets/images/bKnight.png";
 
 import styles from "../../styles/components/User.module.scss";
+import { DocumentData } from "firebase/firestore";
 
 interface IUserProps {
-  user:
-    | {
-        [key: string]: string;
-      }
-    | undefined;
+  user: DocumentData | undefined;
   toggleColor: boolean;
   rotate?: boolean;
 }
@@ -18,7 +15,6 @@ interface IUserProps {
 const User: React.FC<IUserProps> = ({ user, toggleColor, rotate }) => {
   return (
     <div className={styles.container}>
-      <UserInfo user={user} />
       <div className={styles.img + " " + (rotate ? styles.rotate : "")}>
         <Image
           src={toggleColor ? bKnight : wKnight}
@@ -27,6 +23,7 @@ const User: React.FC<IUserProps> = ({ user, toggleColor, rotate }) => {
           layout="fill"
         />
       </div>
+      {user ? <UserInfo user={user} /> : null}
     </div>
   );
 };

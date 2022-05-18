@@ -1,7 +1,7 @@
 import isPathFree from "../isPathFree";
 import isKingSafe from "../isKingSafe";
 
-import { IFigure, IDestination, IPositions, ICastling } from "../../../interfaces";
+import { IFigure, IDestination, IPositions, ICastling } from "../../../../../../interfaces";
 
 const kingValidity = (
   moveInfo: [IFigure, IDestination],

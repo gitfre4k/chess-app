@@ -1,0 +1,42 @@
+@import "./abstracts/variables";
+@import "./abstracts/mixins";
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%; // 1rem == 10px
+
+  @include respond(big-desktop) {
+    font-size: 75%; // 12px
+  }
+  @include respond(tab-port) {
+    font-size: 50%; //8px
+  }
+  @include respond(tab-lend) {
+    font-size: 56.25%; // 9px
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #000;
+  // background-color: #e3e3e3;
+  // background-image: linear-gradient(to right, #c7a772, #815834);
+  background-image: linear-gradient(to right, #e3e3e3, #b5b5b5);
+  display: table;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+h2 {
+  font-size: 3rem;
+}

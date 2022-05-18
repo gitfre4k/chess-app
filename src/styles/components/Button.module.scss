@@ -1,0 +1,36 @@
+@import "../abstracts/variables";
+
+.btn {
+  color: $color-white;
+  width: fit-content;
+  padding: 0.8rem 1.5rem;
+  border: 0.2rem solid $color-white;
+  background: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-weight: 600;
+
+  &:hover {
+    color: $color-black;
+    cursor: pointer;
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0.5rem 0.4rem rgba(255, 255, 255, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-0.1rem);
+    box-shadow: 0 0.2rem 0.4rem rgba(255, 255, 255, 0.3);
+  }
+
+  &Dark {
+    color: black;
+
+    &:hover {
+      box-shadow: 0 0.5rem 0.4rem rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.3);
+    }
+  }
+}

@@ -1,45 +1,23 @@
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import {
-  doc,
-  addDoc,
-  updateDoc,
-  collection,
-  arrayUnion,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, addDoc, updateDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import { startingPositions } from "../constants/positions";
 
 const useRoom = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
 
   const createRoom = () => {
+    if (!user) {
+      alert("In order to create or join a room, please sign in.");
+      return;
+    }
     addDoc(collection(db, "rooms"), {
-      users: [user?.email],
-      host: user?.uid,
-      guest: "",
+      host: user.uid,
+      white: user.uid,
       start: false,
-      admin: user?.email,
-      white: user?.uid,
-      messages: [],
-      positions: JSON.stringify(startingPositions),
-      activePlayer: "white",
-      enPassant: JSON.stringify({
-        white: [],
-        black: [],
-      }),
-      castling: JSON.stringify({
-        white: { short: true, long: true },
-        black: { short: true, long: true },
-      }),
-      notation: [],
-      clock: {
-        white: "",
-        black: "",
-      },
+      clock: "",
     }).then((room) => {
       router.push(`/room/${room.id}`);
       addDoc(collection(db, "messages"), {
@@ -52,11 +30,14 @@ const useRoom = () => {
   };
 
   const joinRoom = (roomID: string) => {
+    if (!user) {
+      alert("In order to create or join a room, please sign in.");
+      return;
+    }
     const docRef = doc(db, "rooms", roomID);
     updateDoc(docRef, {
-      users: arrayUnion(user?.email),
-      guest: user?.uid,
-      black: user?.uid,
+      guest: user.uid,
+      black: user.uid,
     })
       .then(() => {
         router.push(`/room/${roomID}`);
@@ -64,7 +45,7 @@ const useRoom = () => {
           timestamp: serverTimestamp(),
           user: "SERVER",
           roomID: roomID,
-          msg: user?.displayName + " has joined the room.",
+          msg: user.displayName + " has joined the room.",
         });
       })
       .catch((err) => err && alert("Wrong room ID!"));

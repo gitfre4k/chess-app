@@ -1,17 +1,15 @@
-.container {
-  display: flex;
-  position: absolute;
-  left: 2vw;
-}
-
 .chessboard {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  border: 16px solid #7d694c;
+  grid-template-rows: repeat(8, 1fr);
   position: relative;
+  border: 1em solid #7d694c;
+  background-color: #7d694c;
   background-image: url("../../assets/images/board.png");
-  background-position: center;
   background-size: 100%;
+  background-repeat: no-repeat;
+  color: #e3e3e3;
+  margin: 0 1rem;
 }
 
 .promotions {
@@ -22,14 +20,4 @@
   border: 16px solid #7d694c;
   top: -70px;
   border-bottom: 0;
-}
-
-.usersInfo {
-  display: flex;
-  flex-direction: column;
-  margin-left: 1vw;
-  text-align: center;
-  :last-child {
-    margin-top: auto;
-  }
 }

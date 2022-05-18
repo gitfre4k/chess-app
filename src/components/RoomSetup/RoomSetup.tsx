@@ -6,61 +6,44 @@ import {
   doc,
   getDoc,
   updateDoc,
-  arrayUnion,
   addDoc,
   collection,
   serverTimestamp,
+  DocumentData,
 } from "firebase/firestore";
+
+import Button from "../Button/Button";
 import User from "./User";
 import WaitingForGuest from "./WaitingForGuest";
 import WaitingForHost from "./WaitingForHost";
 import HostScreen from "./HostScreen";
-import Image from "next/image";
-import back from "../../assets/images/back.png";
 
 import styles from "../../styles/components/RoomSetup.module.scss";
 import { User as IUser } from "firebase/auth";
-import { DocumentData } from "firebase/firestore";
 
 interface IRoomSetupProps {
   roomID: string;
-  user: IUser | null | undefined;
-  roomDataSnapshot: DocumentData | undefined;
+  user: IUser;
+  roomState: DocumentData;
 }
 
-const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomDataSnapshot }) => {
-  const [host, setHost] = useState<{ [key: string]: string }>();
-  const [guest, setGuest] = useState<{ [key: string]: string }>();
-  const [toggleColor, setToggleColor] = useState(false);
-  const { goBack } = useRoomSetup();
+const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomState }) => {
+  const [hostUser, setHostUser] = useState<DocumentData>();
+  const [guestUser, setGuestUser] = useState<DocumentData>();
+  const { host, guest } = roomState;
+  const toggleColor = host !== roomState.white;
 
   useEffect(() => {
-    const updateRoomInfo = async () => {
-      if (roomDataSnapshot?.host) {
-        const hostSnap = await getDoc(doc(db, "users", roomDataSnapshot.host));
-        setHost(hostSnap.data());
-      }
-      if (roomDataSnapshot?.guest) {
-        const guestSnap = await getDoc(doc(db, "users", roomDataSnapshot.guest));
-        setGuest(guestSnap.data());
-      }
-      setToggleColor(roomDataSnapshot?.host === roomDataSnapshot?.white ? false : true);
-    };
-    updateRoomInfo();
-  }, [roomDataSnapshot?.host, roomDataSnapshot?.guest, roomDataSnapshot?.white]);
+    (async () => {
+      setHostUser((await getDoc(doc(db, "users", host))).data());
+      guest && setGuestUser((await getDoc(doc(db, "users", guest))).data());
+    })();
 
-  useEffect(() => {
-    if (
-      user &&
-      roomDataSnapshot?.host &&
-      !roomDataSnapshot?.guest &&
-      user?.uid !== roomDataSnapshot?.host
-    ) {
+    if (!guest && user.uid !== host) {
       const docRef = doc(db, "rooms", roomID);
       updateDoc(docRef, {
-        users: arrayUnion(user?.email),
-        guest: user?.uid,
-        black: user?.uid,
+        guest: user.uid,
+        black: user.uid,
       });
       addDoc(collection(db, "messages"), {
         timestamp: serverTimestamp(),
@@ -69,28 +52,26 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomDataSnapshot }
         msg: user?.displayName + " has joined the room.",
       });
     }
-  }, [roomDataSnapshot?.guest, roomDataSnapshot?.host, user, roomID]);
+  }, [guest, host, user, roomID]);
 
   return (
-    <>
-      <div className={styles.wrrraper}>
-        <div className={styles.wraper}>
-          <User user={host} toggleColor={toggleColor} rotate={true} />
-          {roomDataSnapshot?.guest ? (
-            <User user={guest} toggleColor={!toggleColor} />
-          ) : (
-            <WaitingForGuest roomID={roomID} />
-          )}
-        </div>
-        {roomDataSnapshot?.guest && roomDataSnapshot?.host === user?.uid ? <HostScreen /> : null}
-        {roomDataSnapshot?.guest === user?.uid ? (
-          <WaitingForHost clock={`${roomDataSnapshot?.clock.white}`} />
-        ) : null}
+    <div className={styles.container}>
+      <div className={styles.roomSetup}>
+        <fieldset>
+          <legend>Players ({roomState.guest ? "2" : "1"}/2)</legend>
+          <div className={styles.roomSetupUsers}>
+            <User user={hostUser} toggleColor={toggleColor} rotate={true} />
+            {guest ? <User user={guestUser} toggleColor={!toggleColor} /> : null}
+          </div>
+        </fieldset>
+        {guest ? null : <WaitingForGuest roomID={roomID} />}
+        {guest && host === user.uid ? <HostScreen user={user} roomState={roomState} /> : null}
+        {guest === user.uid ? <WaitingForHost clock={`${roomState.clock}`} /> : null}
       </div>
-      <div className={styles.back} onClick={goBack}>
-        <Image src={back} alt="back icon" />
+      <div className={styles.btn}>
+        <Button name="Go Back" action={useRoomSetup(user, roomState).goBack} style="dark" />
       </div>
-    </>
+    </div>
   );
 };
 

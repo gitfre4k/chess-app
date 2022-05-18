@@ -1,6 +1,6 @@
 import isPathFree from "../isPathFree";
 
-import { IFigure, IDestination, IPositions } from "../../../interfaces";
+import { IFigure, IDestination, IPositions } from "../../../../../../interfaces";
 
 const rookValidity = (moveInfo: [IFigure, IDestination], positions: IPositions) => {
   const [figure, destination] = moveInfo;

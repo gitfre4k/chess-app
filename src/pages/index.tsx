@@ -1,14 +1,22 @@
+import { useReducer } from "react";
+import { reducer, initialState } from "../reducer/chessReducer";
 import useRoom from "../hooks/useRoom";
 
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase";
+
+import Login from "../components/Login/Login";
+import Chessboard from "../components/Chess";
 import Head from "next/head";
 import Card from "../components/Card/Card";
-import Image from "next/image";
-import home from "../assets/images/home.jpg";
+import Button from "../components/Button/Button";
 
 import styles from "../styles/pages/Home.module.scss";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [user] = useAuthState(auth);
   const { createRoom, joinRoom } = useRoom();
 
   const onJoinRoom = () => {
@@ -23,10 +31,26 @@ const Home: NextPage = () => {
         <title>Chess App</title>
       </Head>
       <main className={styles.container}>
-        <Image src={home} alt="home background" layout="fill" objectFit="cover" />
-        <div className={styles.content}>
-          <Card content={<p>Create Room</p>} onClick={createRoom} first={true} />
-          <Card content={<p>Join Room</p>} onClick={onJoinRoom} />
+        {user ? (
+          <div className={styles.leftSide}>
+            <div className={styles.leftSideCards}>
+              <Card name="Create Room" action={createRoom} />
+              <Card name="Join Room" action={onJoinRoom} />
+            </div>
+          </div>
+        ) : (
+          <Login />
+        )}
+        <div className={styles.containerChess}>
+          <Chessboard state={state} dispatch={dispatch} />
+          <div className={styles.containerChessBtn}>
+            <Button
+              name="Rotate Board"
+              style="dark"
+              action={() => dispatch({ type: "ROTATE_BOARD" })}
+            />
+            <Button name="Reset" style="dark" action={() => dispatch({ type: "RESET" })} />
+          </div>
         </div>
       </main>
     </>
