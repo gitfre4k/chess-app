@@ -3,7 +3,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 import { doc, addDoc, updateDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import { startingPositions } from "../constants/positions";
 
 const useRoom = () => {
   const router = useRouter();
@@ -19,16 +18,6 @@ const useRoom = () => {
       white: user.uid,
       start: false,
       clock: "",
-      // activePlayer: "white",
-      // positions: JSON.stringify(startingPositions),
-      // enPassant: JSON.stringify({
-      //   white: [],
-      //   black: [],
-      // }),
-      // castling: JSON.stringify({
-      //   white: { short: true, long: true },
-      //   black: { short: true, long: true },
-      // }),
     }).then((room) => {
       router.push(`/room/${room.id}`);
       addDoc(collection(db, "messages"), {
@@ -56,7 +45,7 @@ const useRoom = () => {
           timestamp: serverTimestamp(),
           user: "SERVER",
           roomID: roomID,
-          msg: user?.displayName + " has joined the room.",
+          msg: user.displayName + " has joined the room.",
         });
       })
       .catch((err) => err && alert("Wrong room ID!"));

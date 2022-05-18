@@ -5,7 +5,6 @@ import useRoom from "../hooks/useRoom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 
-import Hero from "../components/Hero/Hero";
 import Login from "../components/Login/Login";
 import Chessboard from "../components/Chess";
 import Head from "next/head";

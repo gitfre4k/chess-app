@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import { doc, DocumentData, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { startingPositions } from "../constants/positions";
 
 import { User } from "firebase/auth";
 
@@ -35,6 +36,12 @@ const useRoomSetup = (user: User, roomState: DocumentData) => {
   const startGame = () => {
     updateDoc(roomDocRef, {
       start: true,
+      activePlayer: "white",
+      positions: JSON.stringify(startingPositions),
+      enPassantMoves: JSON.stringify({
+        white: [],
+        black: [],
+      }),
     });
   };
 

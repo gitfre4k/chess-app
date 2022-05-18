@@ -57,14 +57,14 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomState }) => {
   return (
     <div className={styles.container}>
       <div className={styles.roomSetup}>
-        <div className={styles.roomSetupUsers}>
-          <fieldset>
-            <legend>Players ({roomState.guest ? "2" : "1"}/2)</legend>
+        <fieldset>
+          <legend>Players ({roomState.guest ? "2" : "1"}/2)</legend>
+          <div className={styles.roomSetupUsers}>
             <User user={hostUser} toggleColor={toggleColor} rotate={true} />
             {guest ? <User user={guestUser} toggleColor={!toggleColor} /> : null}
-          </fieldset>
-          {guest ? null : <WaitingForGuest roomID={roomID} />}
-        </div>
+          </div>
+        </fieldset>
+        {guest ? null : <WaitingForGuest roomID={roomID} />}
         {guest && host === user.uid ? <HostScreen user={user} roomState={roomState} /> : null}
         {guest === user.uid ? <WaitingForHost clock={`${roomState.clock}`} /> : null}
       </div>

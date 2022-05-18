@@ -1,0 +1,11 @@
+.roomGame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6em;
+
+  &Player {
+    padding: 1em;
+    align-self: flex-start;
+  }
+}

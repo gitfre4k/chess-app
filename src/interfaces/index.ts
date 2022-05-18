@@ -51,18 +51,27 @@ export type ChessState = {
   rotateBoard: boolean;
 };
 
-type TurnSwitchAction = { type: "CHANGE_PLAYER"; payload: "white" | "black" };
+type TurnSwitchAction = {
+  type: "CHANGE_PLAYER";
+  payload: { value: "white" | "black"; roomID?: string | undefined };
+};
 type PositionsAction = {
   type: "UPDATE_POSITIONS";
-  payload: { moveInfo: [IFigure, IDestination] };
+  payload: { moveInfo: [IFigure, IDestination]; roomID?: string | undefined };
 };
-type UpgradePawnAction = { type: "UPGRADE_PAWN"; payload: { figure: string } };
+type UpgradePawnAction = {
+  type: "UPGRADE_PAWN";
+  payload: { figure: string; roomID?: string | undefined };
+};
 type SelectFigureAction = {
   type: "SELECT_FIGURE";
   payload: { figure: IFigure; promotion?: boolean };
 };
 type DeselectFigureAction = { type: "DESELECT_FIGURE" };
-type CheckForEnPassantAction = { type: "CHECK_FOR_EN_PASSANT"; payload: string[] };
+type CheckForEnPassantAction = {
+  type: "CHECK_FOR_EN_PASSANT";
+  payload: { value: string[]; roomID?: string | undefined };
+};
 type PreventEnPassantAction = { type: "PREVENT_EN_PASSANT" };
 type UpdateCastlingStatusAction = {
   type: "UPDATE_CASTLING_STATUS";
@@ -74,6 +83,8 @@ type UpdateCheckStatusAction = { type: "UPDATE_CHECK_STATUS" };
 type CheckForMateAction = { type: "CHECK_FOR_MATE" };
 type RotateBoardAction = { type: "ROTATE_BOARD" };
 type ResetAction = { type: "RESET" };
+type SyncPositionsAction = { type: "SYNC_POSITIONS"; payload: { value: any } };
+type SyncEnPassantMovesAction = { type: "SYNC_EN_PASSANT_MOVES"; payload: { value: any } };
 
 export type ChessAction =
   | TurnSwitchAction
@@ -89,4 +100,6 @@ export type ChessAction =
   | UpdateCheckStatusAction
   | CheckForMateAction
   | RotateBoardAction
-  | ResetAction;
+  | ResetAction
+  | SyncPositionsAction
+  | SyncEnPassantMovesAction;

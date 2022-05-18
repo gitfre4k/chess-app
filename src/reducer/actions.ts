@@ -8,6 +8,8 @@ import {
 } from "../components/Chess/Chessboard/helpers/figure-info";
 
 import { IFigure, IDestination, IEnPassantMoves, ICastling, IPositions } from "../interfaces";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 export const updateCastlingStatus = (
   moveInfo: [IFigure, IDestination],
@@ -208,4 +210,20 @@ export const checkForMate = (
     }
   }
   return isMate;
+};
+
+export const uploadToFirebase = (type: string, value: any, roomID: string) => {
+  let newState;
+  switch (type) {
+    case "activePlayer":
+      newState = { activePlayer: value };
+      break;
+    case "positions":
+      newState = { positions: JSON.stringify(value) };
+      break;
+    case "enPassantMoves":
+      newState = { enPassantMoves: JSON.stringify(value) };
+      break;
+  }
+  updateDoc(doc(db, "rooms", roomID), newState);
 };

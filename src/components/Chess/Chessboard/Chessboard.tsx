@@ -6,17 +6,21 @@ import * as f from "../../../constants/figures";
 import isMoveValid from "./helpers/move-validity/isMoveValid";
 import isKingSafe from "./helpers/move-validity/isKingSafe";
 
-import { IFigure, IDestination, ChessState, ChessAction } from "../../../interfaces";
-import { Dispatch } from "react";
-
 import styles from "../../../styles/components/Chessboard.module.scss";
+import { Dispatch } from "react";
+import { DocumentData } from "firebase/firestore";
+import { User as IUser } from "firebase/auth";
+import { IFigure, IDestination, ChessState, ChessAction } from "../../../interfaces";
 
 interface ChessboardProps {
   state: ChessState;
   dispatch: Dispatch<ChessAction>;
+  roomState?: DocumentData;
+  user?: IUser;
+  roomID?: string;
 }
 
-const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch }) => {
+const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch, roomState, user, roomID }) => {
   const {
     activePlayer,
     positions,
@@ -42,7 +46,12 @@ const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch }) => {
 
   const squareClickHandler = (x: number, y: number, figure?: IFigure) => {
     if (mate || pawnPromotion) return;
-    if (!selectedFigure && figure && activePlayer === figure.color) {
+    if (
+      !selectedFigure &&
+      figure &&
+      activePlayer === figure.color &&
+      (roomState && user ? user.uid === roomState[activePlayer] : true)
+    ) {
       dispatch({
         type: "SELECT_FIGURE",
         payload: { figure, promotion: false },
@@ -60,7 +69,7 @@ const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch }) => {
         isMoveValid(moveInfo, positions, enPassantMoves, castling) &&
         isKingSafe(moveInfo2, positions)
       ) {
-        dispatch({ type: "UPDATE_POSITIONS", payload: { moveInfo } });
+        dispatch({ type: "UPDATE_POSITIONS", payload: { moveInfo, roomID } });
         dispatch({ type: "UPDATE_CASTLING_STATUS", payload: { moveInfo } });
         if (selectedFigure.name === "pawn" && (y === 8 || y === 1)) {
           figure &&
@@ -71,18 +80,30 @@ const Chessboard: React.FC<ChessboardProps> = ({ state, dispatch }) => {
           dispatch({ type: "PROMOTE_PAWN", payload: `${x}${y}` });
           return;
         }
-        dispatch({ type: "CHECK_FOR_EN_PASSANT", payload: moveInfo2 });
-        dispatch({ type: "CHANGE_PLAYER", payload: activePlayer === "white" ? "black" : "white" });
+        dispatch({ type: "CHECK_FOR_EN_PASSANT", payload: { value: moveInfo2, roomID } });
+        dispatch({
+          type: "CHANGE_PLAYER",
+          payload: {
+            value: activePlayer === "white" ? "black" : "white",
+            roomID,
+          },
+        });
       }
       dispatch({ type: "DESELECT_FIGURE" });
     }
   };
 
   const promotionClickHandler = (x: number, y: number, figure?: IFigure) => {
-    figure && dispatch({ type: "UPGRADE_PAWN", payload: { figure: figure.piece } });
+    figure && dispatch({ type: "UPGRADE_PAWN", payload: { figure: figure.piece, roomID } });
     dispatch({ type: "DESELECT_FIGURE" });
     dispatch({ type: "END_PAWN_PROMOTION" });
-    dispatch({ type: "CHANGE_PLAYER", payload: activePlayer === "white" ? "black" : "white" });
+    dispatch({
+      type: "CHANGE_PLAYER",
+      payload: {
+        value: activePlayer === "white" ? "black" : "white",
+        roomID,
+      },
+    });
   };
 
   const renderChessboard = () => {

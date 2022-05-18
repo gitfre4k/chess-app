@@ -9,6 +9,7 @@ import {
   checkForEnPassant,
   updateCheckStatus,
   checkForMate,
+  uploadToFirebase,
 } from "./actions";
 
 import { ChessState, ChessAction } from "../interfaces";
@@ -31,25 +32,34 @@ const initialState: ChessState = {
 
 const reducer = (state: ChessState, action: ChessAction) => {
   switch (action.type) {
-    case "CHANGE_PLAYER":
-      return { ...state, activePlayer: action.payload };
+    case "CHANGE_PLAYER": {
+      action.payload.roomID &&
+        uploadToFirebase("activePlayer", action.payload.value, action.payload.roomID);
+      return { ...state, activePlayer: action.payload.value };
+    }
 
-    case "UPDATE_POSITIONS":
+    case "UPDATE_POSITIONS": {
+      const newPositions = getNewPositions(
+        action.payload.moveInfo,
+        state.activePlayer,
+        state.enPassantMoves,
+        state.positions
+      );
+      action.payload.roomID && uploadToFirebase("positions", newPositions, action.payload.roomID);
       return {
         ...state,
-        positions: getNewPositions(
-          action.payload.moveInfo,
-          state.activePlayer,
-          state.enPassantMoves,
-          state.positions
-        ),
+        positions: newPositions,
       };
+    }
 
-    case "UPGRADE_PAWN":
+    case "UPGRADE_PAWN": {
+      const newPositions = upgradePawn(state.pawnPromotion, action.payload.figure, state.positions);
+      action.payload.roomID && uploadToFirebase("positions", newPositions, action.payload.roomID);
       return {
         ...state,
-        positions: upgradePawn(state.pawnPromotion, action.payload.figure, state.positions),
+        positions: newPositions,
       };
+    }
 
     case "SELECT_FIGURE":
       return {
@@ -67,11 +77,19 @@ const reducer = (state: ChessState, action: ChessAction) => {
     case "DESELECT_FIGURE":
       return { ...state, selectedFigure: undefined, validMoves: [] };
 
-    case "CHECK_FOR_EN_PASSANT":
+    case "CHECK_FOR_EN_PASSANT": {
+      const newEnPassantMoves = checkForEnPassant(
+        state.enPassantMoves,
+        action.payload.value,
+        state.positions
+      );
+      action.payload.roomID &&
+        uploadToFirebase("enPassantMoves", newEnPassantMoves, action.payload.roomID);
       return {
         ...state,
-        enPassantMoves: checkForEnPassant(state.enPassantMoves, action.payload, state.positions),
+        enPassantMoves: newEnPassantMoves,
       };
+    }
 
     case "PREVENT_EN_PASSANT":
       return {
@@ -96,6 +114,18 @@ const reducer = (state: ChessState, action: ChessAction) => {
 
     case "CHECK_FOR_MATE":
       return { ...state, mate: checkForMate(state.activePlayer, state.positions) };
+
+    case "SYNC_POSITIONS":
+      return {
+        ...state,
+        positions: action.payload.value,
+      };
+
+    case "SYNC_EN_PASSANT_MOVES":
+      return {
+        ...state,
+        enPassantMoves: action.payload.value,
+      };
 
     case "ROTATE_BOARD":
       return { ...state, rotateBoard: !state.rotateBoard };
