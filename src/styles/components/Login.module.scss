@@ -1,12 +1,19 @@
+@import "../abstracts/mixins";
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  margin: 2rem auto 0;
+  width: fit-content;
 
   h2 {
     margin-bottom: 1rem;
+
+    @include respond(tab-lend) {
+      font-size: 4rem;
+    }
   }
 
   button {

@@ -4,11 +4,21 @@
   display: flex;
   position: absolute;
   user-select: none;
+  margin: 0.5em;
 
-  span {
-    font-size: 2rem;
-    font-weight: 500;
-    margin: 1em 0.5em;
+  &Text {
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    &1 {
+      margin: 1em 0.5em 0;
+    }
+    &2 {
+      margin: 0 0.2em;
+    }
   }
 
   &Logo {
@@ -16,17 +26,4 @@
     height: 3.7em;
     width: 5em;
   }
-
-  // @include respond(tab-lend) {
-  //   margin-top: 10rem;
-
-  //   span {
-  //     font-size: 5.5rem;
-  //   }
-
-  //   &Logo {
-  //     height: 18rem;
-  //     width: 24rem;
-  //   }
-  // }
 }
