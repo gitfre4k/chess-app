@@ -3,14 +3,13 @@
 
 .header {
   display: flex;
-  // width: 100vw;
 
   &RightSide {
     position: absolute;
     right: 0.5em;
     top: 0.5em;
     background-color: $color-green;
-    width: fit-content;
+    // width: fit-content;
     padding: 0.6em;
     height: 3.7em;
 

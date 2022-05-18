@@ -14,7 +14,7 @@
     &Users {
       display: flex;
       flex-direction: column;
-      gap: 0.5em;
+      gap: 0.5rem;
     }
 
     legend {
@@ -22,7 +22,7 @@
     }
 
     fieldset {
-      padding-bottom: 0.5em;
+      padding: 0.5rem;
     }
   }
   .btn {

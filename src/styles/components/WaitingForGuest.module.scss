@@ -5,15 +5,14 @@
   width: max-content;
 
   &Title {
-    font-size: 2rem;
     margin-bottom: 1rem;
   }
 
   &CopyLines {
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
     p {
-      width: 8rem;
       text-align: center;
     }
     input {
@@ -29,6 +28,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .success {

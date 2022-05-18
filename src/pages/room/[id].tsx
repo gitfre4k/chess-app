@@ -34,25 +34,23 @@ const Room = () => {
   }, [user, router.query.id]);
 
   return (
-    <>
-      <div className={styles.container}>
-        {user && roomState ? (
-          roomState.start ? (
-            <RoomGame
-              chessState={chessState}
-              dispatch={dispatch}
-              user={user}
-              roomState={roomState}
-              roomID={`${router.query.id}`}
-            />
-          ) : (
-            <RoomSetup roomID={`${router.query.id}`} user={user} roomState={roomState} />
-          )
+    <div className={styles.container}>
+      {user && roomState ? (
+        roomState.start ? (
+          <RoomGame
+            chessState={chessState}
+            dispatch={dispatch}
+            user={user}
+            roomState={roomState}
+            roomID={`${router.query.id}`}
+          />
         ) : (
-          <p>loading...</p>
-        )}
-      </div>
-    </>
+          <RoomSetup roomID={`${router.query.id}`} user={user} roomState={roomState} />
+        )
+      ) : (
+        <p>loading...</p>
+      )}
+    </div>
   );
 };
 
