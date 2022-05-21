@@ -17,9 +17,9 @@ const HostScreen: React.FC<HostScreenProps> = ({ user, roomState }) => {
 
   return (
     <div className={styles.hostOptions}>
-      <div className={styles.hostOptionsClock}>
-        <TimerIcon />
+      <div className={styles.hostOptions__clock}>
         <Button name="-" action={() => changeTime(false)} style="dark" />
+        <TimerIcon />
         <p>
           {["", "1:00", "3:00", "5:00"][time] === ""
             ? "No Timer"
@@ -28,7 +28,9 @@ const HostScreen: React.FC<HostScreenProps> = ({ user, roomState }) => {
         <Button name="+" action={() => changeTime(true)} style="dark" />
       </div>
       <Button name="Change Color" action={changeColor} style="dark" />
-      <Button name="START GAME" action={startGame} style="dark" />
+      <div className={styles.hostOptions__start}>
+        <Button name="START GAME" action={startGame} style="dark" />
+      </div>
     </div>
   );
 };

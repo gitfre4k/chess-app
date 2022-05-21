@@ -1,15 +1,27 @@
+@import "../abstracts/mixins";
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 5rem 1rem;
+  margin: 0 1rem;
+
+  @include respond(tab-port) {
+    margin-top: 20rem;
+  }
 
   .roomSetup {
     width: 100%;
-    max-width: 100rem;
+    max-width: 80rem;
     margin: 2rem 1rem;
     border: solid 2px white;
     padding: 1rem;
+
+    @include respond(tab-port) {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
 
     &Users {
       display: flex;

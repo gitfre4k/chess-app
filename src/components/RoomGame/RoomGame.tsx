@@ -50,15 +50,22 @@ const RoomGame: React.FC<RoomGameProps> = ({ chessState, dispatch, user, roomSta
 
   return (
     <div className={styles.roomGame}>
-      <div className={styles.roomGamePlayer}>{blackPlayer && <UserInfo user={blackPlayer} />}</div>
-      <Chessboard
-        state={chessState}
-        dispatch={dispatch}
-        roomState={roomState}
-        user={user}
-        roomID={roomID}
-      />
-      <div className={styles.roomGamePlayer}>{whitePlayer && <UserInfo user={whitePlayer} />}</div>
+      <div className={styles.roomGame__player}>
+        {blackPlayer && <UserInfo user={blackPlayer} />}
+      </div>
+      <div className={styles.roomGame__chessboard}>
+        <Chessboard
+          state={chessState}
+          dispatch={dispatch}
+          roomState={roomState}
+          user={user}
+          roomID={roomID}
+        />
+      </div>
+
+      <div className={styles.roomGame__player}>
+        {whitePlayer && <UserInfo user={whitePlayer} />}
+      </div>
     </div>
   );
 };

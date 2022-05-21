@@ -4,4 +4,13 @@
   gap: 1rem;
   padding: 0.5em;
   width: min(100%, 35rem);
+
+  &__img {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    flex-shrink: 0;
+    border-radius: 0.3rem;
+    overflow: hidden;
+  }
 }

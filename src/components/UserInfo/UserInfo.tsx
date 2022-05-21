@@ -10,7 +10,9 @@ interface IUserInfo {
 const UserInfo: React.FC<IUserInfo> = ({ user }) => {
   return (
     <div className={styles.userInfo}>
-      <Image src={user.photoURL} alt="user photo" height="50%" width="50%" objectFit="contain" />
+      <div className={styles.userInfo__img}>
+        <Image src={user.photoURL} alt="user photo" layout="fill" />
+      </div>
       <p>{user.name}</p>
     </div>
   );

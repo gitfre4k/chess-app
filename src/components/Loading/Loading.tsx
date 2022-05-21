@@ -9,7 +9,7 @@ const Loading = () => {
   return (
     <>
       <Head>
-        <title>Loading...</title>
+        <title>loading...</title>
       </Head>
       <div className={styles.container}>
         <Image src={loadingImage} alt="chessboard" />

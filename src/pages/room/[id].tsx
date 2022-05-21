@@ -8,6 +8,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import RoomSetup from "../../components/RoomSetup/RoomSetup";
 import RoomGame from "../../components/RoomGame/RoomGame";
+import Chat from "../../components/Chat/Chat";
 import { reducer, initialState } from "../../reducer/chessReducer";
 
 import styles from "../../styles/pages/Room.module.scss";
@@ -50,6 +51,7 @@ const Room = () => {
       ) : (
         <p>loading...</p>
       )}
+      <Chat />
     </div>
   );
 };

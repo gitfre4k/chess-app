@@ -2,9 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
 
   &Clock {
     display: flex;
     align-items: center;
+    margin-right: 2em;
   }
 }

@@ -1,53 +1,49 @@
-.container {
-  position: absolute;
-  width: 25vw;
-  height: 60vh;
-  right: 1vw;
-  bottom: 0;
+@import "../abstracts/mixins";
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  max-width: 50rem;
+
   overflow: hidden;
   ::-webkit-scrollbar {
-    width: 0.5vw;
+    width: 1rem;
   }
   ::-webkit-scrollbar-thumb {
     background-color: #7775;
-    border-radius: 100vw;
+    border-radius: 100px;
   }
   ::-webkit-scrollbar-track {
     background-color: #5555;
-    border-radius: 100vw;
+    border-radius: 100px;
     margin-block: 3em;
   }
+
+  @include respond(tab-lend) {
+    position: absolute;
+    bottom: 0;
+    right: 1rem;
+  }
+
+  &__messages {
+    height: 40rem;
+    padding: 2rem;
+    overflow-y: scroll;
+  }
+
   form {
-    position: absolute;
-    bottom: 3vh;
-  }
-  input {
-    padding: 4px;
-    padding-left: 25px;
-    width: 21vw;
-    display: inline-block;
-    border-bottom-left-radius: 50px;
-    box-sizing: border-box;
-    background-color: rgb(12, 12, 12);
-    color: white;
-  }
-  button {
-    display: inline-block;
-    position: absolute;
-    padding: 4px;
-    width: 4vw;
-    border-bottom-right-radius: 50px;
-    background-color: rgb(24, 24, 24);
-    color: white;
-  }
-}
+    display: flex;
 
-.messages {
-  overflow-y: scroll;
-  padding: 1rem;
-  height: 56vh;
+    input {
+      width: 80%;
+      height: max;
+      padding-left: 1rem;
+    }
 
-  div {
-    margin-bottom: 50px;
+    button {
+      width: 20%;
+    }
   }
 }

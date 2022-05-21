@@ -35,21 +35,28 @@
 }
 
 .leftSide {
-  display: flex;
-  flex-direction: column;
   @include respond(tab-lend) {
     margin-left: auto;
-    align-items: center;
   }
 
   &Cards {
     display: flex;
-    gap: 5rem;
+    align-items: center;
+    gap: 1rem;
     justify-content: center;
     margin: 2rem 1rem 0.5rem;
 
     @include respond(tab-lend) {
       margin: 8rem auto 6rem;
     }
+    @include respond(tab-port) {
+      gap: 5rem;
+      margin: 2rem;
+    }
   }
+}
+
+.background {
+  z-index: -1;
+  position: absolute;
 }

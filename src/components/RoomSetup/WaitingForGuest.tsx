@@ -32,8 +32,8 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
     <>
       <div className={styles.waiting}>
         <p className={styles.waitingTitle}>Share link or room ID to invite a friend.</p>
-        <p>Link</p>
         <div className={styles.waitingCopyLines}>
+          <p>Link</p>
           <input value={href} readOnly />
           <Button name="Copy" action={() => onCopy(true)} style="dark" />
           <Image
@@ -44,8 +44,8 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
             className={copyLink ? styles.success : styles.img}
           />
         </div>
-        <p>Room ID</p>
         <div className={styles.waitingCopyLines}>
+          <p>Room ID</p>
           <input value={roomID} readOnly />
           <Button name="Copy" action={() => onCopy()} style="dark" />
           <Image
@@ -57,10 +57,10 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
           />
         </div>
       </div>
-      <div className={styles.loading}>
+      {/* <div className={styles.loading}>
         <LoadingIndicator pulse={true} />
         <p>Waiting for someone to join...</p>
-      </div>
+      </div> */}
     </>
   );
 };
