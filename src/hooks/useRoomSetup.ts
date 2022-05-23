@@ -21,14 +21,16 @@ const useRoomSetup = (user: User, roomState: DocumentData) => {
         white: roomState.guest,
         guest: "",
         black: "",
-        clock: "",
+        whiteClock: "",
+        blackClock: "",
       });
     user.uid === roomState.guest &&
       updateDoc(roomDocRef, {
         white: roomState.host,
         guest: "",
         black: "",
-        clock: "",
+        whiteClock: "",
+        blackClock: "",
       });
     router.push(`/`);
   };
@@ -53,26 +55,26 @@ const useRoomSetup = (user: User, roomState: DocumentData) => {
     });
   };
 
-  const setClock = useCallback(
-    (time: string) => {
-      updateDoc(roomDocRef, {
-        clock: time,
-      });
-    },
-    [roomDocRef]
-  );
+  const setClock = (time: string) => {
+    updateDoc(roomDocRef, {
+      whiteClock: time,
+      blackClock: time,
+    });
+  };
 
   const changeTime = (increment: boolean) => {
     if (increment)
       setTime((prevValue) => {
         const newValue = prevValue === timeIndex.length - 1 ? 0 : prevValue + 1;
         setClock(timeIndex[newValue]);
+
         return newValue;
       });
     else
       setTime((prevValue) => {
         const newValue = prevValue === 0 ? timeIndex.length - 1 : prevValue - 1;
         setClock(timeIndex[newValue]);
+
         return newValue;
       });
   };

@@ -37,7 +37,6 @@ const useChat = () => {
   const showMessages = () => {
     if (!user) return;
     if (messagesSnapshot) {
-      scrollToBottom();
       return messagesSnapshot.docs.map((msg, index) => (
         <Message
           key={index}

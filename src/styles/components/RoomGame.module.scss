@@ -8,15 +8,19 @@
 
   &__chessboard {
     flex-grow: 0;
-    // order: -1;
   }
 
   &__player {
-    margin: 1rem;
-    border: 1px solid whitesmoke;
-    border-radius: 0.3rem;
+    display: flex;
+    align-items: center;
     align-self: flex-start;
-    width: min(50%, 30rem);
+
+    &__name {
+      margin: 1rem;
+      border: 1px solid whitesmoke;
+      border-radius: 0.3rem;
+      width: 25rem;
+    }
   }
 
   @include respond(tab-lend) {

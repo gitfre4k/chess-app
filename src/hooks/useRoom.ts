@@ -17,7 +17,8 @@ const useRoom = () => {
       host: user.uid,
       white: user.uid,
       start: false,
-      clock: "",
+      whiteClock: "",
+      blackClock: "",
     }).then((room) => {
       router.push(`/room/${room.id}`);
       addDoc(collection(db, "messages"), {

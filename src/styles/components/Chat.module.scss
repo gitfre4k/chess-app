@@ -6,10 +6,11 @@
   margin: 3rem auto;
   padding: 0 1rem;
   max-width: 50rem;
-
   overflow: hidden;
+
   ::-webkit-scrollbar {
     width: 1rem;
+    margin-right: 1rem;
   }
   ::-webkit-scrollbar-thumb {
     background-color: #7775;

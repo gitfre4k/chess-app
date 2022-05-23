@@ -57,10 +57,6 @@ const WaitingForGuest: React.FC<IWaitingForGuestProps> = ({ roomID }) => {
           />
         </div>
       </div>
-      {/* <div className={styles.loading}>
-        <LoadingIndicator pulse={true} />
-        <p>Waiting for someone to join...</p>
-      </div> */}
     </>
   );
 };

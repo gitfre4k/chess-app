@@ -30,7 +30,7 @@ interface IRoomSetupProps {
 const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomState }) => {
   const [hostUser, setHostUser] = useState<DocumentData>();
   const [guestUser, setGuestUser] = useState<DocumentData>();
-  const { host, guest } = roomState;
+  const { host, guest, whiteClock } = roomState;
   const toggleColor = host !== roomState.white;
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const RoomSetup: React.FC<IRoomSetupProps> = ({ roomID, user, roomState }) => {
         </fieldset>
         {guest ? null : <WaitingForGuest roomID={roomID} />}
         {guest && host === user.uid ? <HostScreen user={user} roomState={roomState} /> : null}
-        {guest === user.uid ? <WaitingForHost clock={`${roomState.clock}`} /> : null}
+        {guest === user.uid ? <WaitingForHost clock={whiteClock} /> : null}
       </div>
       <div className={styles.btn}>
         <Button name="Go Back" action={useRoomSetup(user, roomState).goBack} style="dark" />
