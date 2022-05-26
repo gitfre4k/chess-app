@@ -10,6 +10,7 @@ import Chessboard from "../components/Chess";
 import Head from "next/head";
 import Card from "../components/Card/Card";
 import Button from "../components/Button/Button";
+import NotationBoard from "../components/NotationBoard/NotationBoard";
 
 import styles from "../styles/pages/Home.module.scss";
 import type { NextPage } from "next";
@@ -41,15 +42,26 @@ const Home: NextPage = () => {
         ) : (
           <Login />
         )}
-        <div className={styles.containerChess}>
-          <Chessboard state={state} dispatch={dispatch} />
-          <div className={styles.containerChessBtn}>
-            <Button
-              name="Rotate Board"
-              style="dark"
-              action={() => dispatch({ type: "ROTATE_BOARD" })}
-            />
-            <Button name="Reset" style="dark" action={() => dispatch({ type: "RESET" })} />
+        <div className={styles.container__chess}>
+          <div className={styles.conteiner__chess__chessboard}>
+            <Chessboard state={state} dispatch={dispatch} />
+            <div className={styles.container__chess__chessboard__btn}>
+              <Button
+                name="Rotate Board"
+                style="dark"
+                action={() => dispatch({ type: "ROTATE_BOARD" })}
+              />
+              <Button name="Reset" style="dark" action={() => dispatch({ type: "RESET" })} />
+            </div>
+          </div>
+          <div
+            className={
+              state.notations.length
+                ? styles.container__chess__notations
+                : styles.container__chess__notationsHide
+            }
+          >
+            <NotationBoard notations={state.notations} />
           </div>
         </div>
       </main>

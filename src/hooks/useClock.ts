@@ -5,9 +5,9 @@ const useClock = (time: string, update: boolean) => {
 
   useEffect(() => {
     if (!update) return;
-    let myInterval = setInterval(() => {
+    const myInterval = setInterval(() => {
       setMinsec((prevValue) => {
-        let [minutes, seconds] = prevValue;
+        const [minutes, seconds] = prevValue;
         if (seconds > 0) return [minutes, seconds - 1];
         if (seconds === 0) {
           if (minutes === 0) clearInterval(myInterval);

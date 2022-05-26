@@ -5,6 +5,7 @@ import { DocumentData, getDoc, doc, updateDoc } from "firebase/firestore";
 import Chessboard from "../Chess";
 import UserInfo from "../UserInfo/UserInfo";
 import Clock from "../Clock/Clock";
+import NotationBoard from "../NotationBoard/NotationBoard";
 import { db } from "../../firebase";
 import { emptyBoard } from "../../constants/positions";
 
@@ -22,8 +23,16 @@ interface RoomGameProps {
 const RoomGame: React.FC<RoomGameProps> = ({ chessState, dispatch, user, roomState, roomID }) => {
   const [whitePlayer, setWhitePlayer] = useState<DocumentData>();
   const [blackPlayer, setBlackPlayer] = useState<DocumentData>();
-  const { white, black, activePlayer, positions, enPassantMoves, whiteClock, blackClock } =
-    roomState;
+  const {
+    white,
+    black,
+    activePlayer,
+    positions,
+    enPassantMoves,
+    whiteClock,
+    blackClock,
+    notations,
+  } = roomState;
 
   useEffect(() => {
     (async () => {
@@ -49,6 +58,13 @@ const RoomGame: React.FC<RoomGameProps> = ({ chessState, dispatch, user, roomSta
       payload: { value: { ...JSON.parse(enPassantMoves) } },
     });
   }, [enPassantMoves, dispatch]);
+
+  useEffect(() => {
+    dispatch({
+      type: "SYNC_NOTATIONS",
+      payload: { value: notations },
+    });
+  }, [notations, dispatch]);
 
   return (
     <div className={styles.roomGame}>
@@ -86,6 +102,13 @@ const RoomGame: React.FC<RoomGameProps> = ({ chessState, dispatch, user, roomSta
             update={user.uid === white && activePlayer === "white"}
           />
         ) : null}
+      </div>
+      <div
+        className={
+          chessState.notations.length ? styles.roomGame__notations : styles.roomGame__notationsHide
+        }
+      >
+        <NotationBoard notations={chessState.notations} />
       </div>
     </div>
   );

@@ -22,7 +22,7 @@
     margin-block: 3em;
   }
 
-  @include respond(tab-lend) {
+  @include respond(tab-port) {
     position: absolute;
     bottom: 0;
     right: 1rem;

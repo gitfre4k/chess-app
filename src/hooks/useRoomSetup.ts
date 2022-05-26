@@ -44,6 +44,7 @@ const useRoomSetup = (user: User, roomState: DocumentData) => {
         white: [],
         black: [],
       }),
+      notations: [],
     });
   };
 

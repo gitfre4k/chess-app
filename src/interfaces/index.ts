@@ -46,6 +46,7 @@ export type ChessState = {
     black: { short: boolean; long: boolean };
   };
   pawnPromotion: string;
+  notations: string[];
   check: { white: boolean; black: boolean };
   mate: boolean;
   rotateBoard: boolean;
@@ -84,6 +85,7 @@ type CheckForMateAction = { type: "CHECK_FOR_MATE" };
 type RotateBoardAction = { type: "ROTATE_BOARD" };
 type ResetAction = { type: "RESET" };
 type SyncPositionsAction = { type: "SYNC_POSITIONS"; payload: { value: any } };
+type SyncNotationsAction = { type: "SYNC_NOTATIONS"; payload: { value: any } };
 type SyncEnPassantMovesAction = { type: "SYNC_EN_PASSANT_MOVES"; payload: { value: any } };
 
 export type ChessAction =
@@ -102,4 +104,5 @@ export type ChessAction =
   | RotateBoardAction
   | ResetAction
   | SyncPositionsAction
+  | SyncNotationsAction
   | SyncEnPassantMovesAction;

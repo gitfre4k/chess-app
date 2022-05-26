@@ -1,4 +1,5 @@
 import { startingPositions } from "../constants/positions";
+import isKingSafe from "../components/Chess/Chessboard/helpers/move-validity/isKingSafe";
 
 import {
   getNewPositions,
@@ -7,6 +8,7 @@ import {
   getValidMoves,
   preventEnPassant,
   checkForEnPassant,
+  getNewNotation,
   updateCheckStatus,
   checkForMate,
   uploadToFirebase,
@@ -25,6 +27,7 @@ const initialState: ChessState = {
     black: { short: true, long: true },
   },
   pawnPromotion: "",
+  notations: [],
   check: { white: false, black: false },
   mate: false,
   rotateBoard: false,
@@ -45,9 +48,21 @@ const reducer = (state: ChessState, action: ChessAction) => {
         state.enPassantMoves,
         state.positions
       );
+      const newNotations = [
+        ...state.notations,
+        getNewNotation(
+          action.payload.moveInfo,
+          !!state.positions[action.payload.moveInfo[1].xy],
+          !isKingSafe(["CHECK", state.activePlayer === "white" ? "black" : "white"], newPositions),
+          checkForMate(state.activePlayer === "white" ? "black" : "white", newPositions)
+        ),
+      ];
       action.payload.roomID && uploadToFirebase("positions", newPositions, action.payload.roomID);
+      action.payload.roomID && uploadToFirebase("notations", newNotations, action.payload.roomID);
+
       return {
         ...state,
+        notations: newNotations,
         positions: newPositions,
       };
     }
@@ -125,6 +140,12 @@ const reducer = (state: ChessState, action: ChessAction) => {
       return {
         ...state,
         enPassantMoves: action.payload.value,
+      };
+
+    case "SYNC_NOTATIONS":
+      return {
+        ...state,
+        notations: action.payload.value,
       };
 
     case "ROTATE_BOARD":

@@ -163,7 +163,26 @@ export const getNewPositions = (
   newPositions[destination.xy] = newPositions[figure.xy];
   newPositions[figure.xy] = undefined;
 
+  console.log(figure.name, destination.xy);
+
   return { ...newPositions };
+};
+
+const getFigureNotation = (figureName: string) => {
+  switch (figureName) {
+    case "king":
+      return "K";
+    case "queen":
+      return "Q";
+    case "bishop":
+      return "B";
+    case "knight":
+      return "N";
+    case "rook":
+      return "R";
+    default:
+      return "";
+  }
 };
 
 export const upgradePawn = (
@@ -177,6 +196,29 @@ export const upgradePawn = (
   newPositions[pawn] = figure;
 
   return { ...newPositions };
+};
+
+export const getNewNotation = (
+  moveInfo: [IFigure, IDestination],
+  captured: boolean,
+  check: boolean,
+  mate: boolean
+) => {
+  const [figure, destination] = moveInfo;
+  const figureNotation = getFigureNotation(figure.name);
+  const x = ["", "a", "b", "c", "d", "e", "f", "g", "h"][destination.x];
+  const file = ["", "a", "b", "c", "d", "e", "f", "g", "h"][figure.x];
+
+  if (figure.name === "pawn" && (captured || figure.x !== destination.x))
+    return `${file}x${x}${destination.y}${check ? "+" : ""}`;
+  if (figure.name === "king" && figure.x === 5) {
+    if (destination.x === 3) return "0-0-0";
+    if (destination.x === 7) return "0-0";
+  }
+
+  return `${figureNotation}${captured ? "x" : ""}${x}${destination.y}${
+    check ? (mate ? "#" : "+") : ""
+  }`;
 };
 
 export const updateCheckStatus = (
@@ -223,6 +265,9 @@ export const uploadToFirebase = (type: string, value: any, roomID: string) => {
       break;
     case "enPassantMoves":
       newState = { enPassantMoves: JSON.stringify(value) };
+      break;
+    case "notations":
+      newState = { notations: value };
       break;
   }
   updateDoc(doc(db, "rooms", roomID), newState);
