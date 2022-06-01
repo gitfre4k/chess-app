@@ -19,7 +19,9 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
 
   return (
     <header className={styles.header}>
-      <Hero />
+      <div className={styles.header__leftSide}>
+        <Hero />
+      </div>
       {user ? (
         <div className={styles.headerRightSide}>
           <div className={styles.headerRightSideUserInfo}>

@@ -1,9 +1,15 @@
+@import "../abstracts/mixins";
+
 .waiting {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
   margin-bottom: 1rem;
+
+  @include respond(tab-port) {
+    width: 50%;
+  }
 
   &Clock {
     display: flex;

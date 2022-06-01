@@ -2,9 +2,8 @@
 
 .hero {
   display: flex;
-  position: absolute;
   user-select: none;
-  margin: 0.5em;
+  margin-right: 2rem;
 
   &Text {
     display: flex;

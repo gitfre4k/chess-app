@@ -3,11 +3,24 @@
 
 .header {
   display: flex;
+  justify-content: flex-end;
+  padding: 0.5em;
+
+  @include respond(tab-lend) {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+  }
+
+  &__leftSide {
+    flex-grow: 1;
+
+    @include respond(tab-lend) {
+      flex-grow: 0;
+    }
+  }
 
   &RightSide {
-    position: absolute;
-    right: 0.5em;
-    top: 0.5em;
     background-color: $color-green;
     border-radius: 0.3rem;
     padding: 0.6em;

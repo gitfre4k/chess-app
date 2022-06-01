@@ -6,16 +6,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 100vw;
-  padding-top: 5em;
+  overflow-x: hidden;
 
   @include respond(tab-lend) {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 7rem;
     padding: 0 3rem;
+    height: 100vh;
   }
 
   &__chess {
@@ -27,6 +26,7 @@
       flex-direction: row;
       justify-content: center;
       gap: 1rem;
+      order: -1;
     }
 
     &__chessboard {
@@ -74,10 +74,6 @@
 }
 
 .leftSide {
-  @include respond(tab-lend) {
-    // margin-left: auto;
-  }
-
   &Cards {
     display: flex;
     align-items: center;

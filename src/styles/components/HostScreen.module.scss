@@ -1,13 +1,18 @@
+@import "../abstracts/mixins";
+
 .hostOptions {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 
+  @include respond(tab-port) {
+    width: 50%;
+  }
+
   &__clock {
     display: flex;
     align-items: center;
-    // gap: 0.5rem;
 
     button {
       font-size: 1.5rem;
